@@ -104,7 +104,7 @@
 <p><img src="https://coolbie.github.io/picx-images-hosting/images/2020/11/03.9rjgsmztma.avif" alt="03"></p>
 <p>这里可设置为根域名</p>
 <p><img src="https://coolbie.github.io/picx-images-hosting/images/2020/11/04.9gwmzhklgz.avif" alt="04"></p>
-<p>默认管理员帐号为 <a href="mailto:&#x70;&#111;&#x73;&#x74;&#x6d;&#97;&#115;&#x74;&#101;&#114;&#64;&#x64;&#x6f;&#x6d;&#97;&#105;&#x6e;&#x2e;&#x63;&#x6f;&#x6d;">&#x70;&#111;&#x73;&#x74;&#x6d;&#97;&#115;&#x74;&#101;&#114;&#64;&#x64;&#x6f;&#x6d;&#97;&#105;&#x6e;&#x2e;&#x63;&#x6f;&#x6d;</a> 且无法修改（domain.com 为您刚才设置的邮件域名）</p>
+<p>默认管理员帐号为 <a href="mailto:&#112;&#x6f;&#115;&#116;&#109;&#x61;&#115;&#116;&#x65;&#x72;&#x40;&#x64;&#111;&#x6d;&#97;&#x69;&#110;&#x2e;&#99;&#111;&#x6d;">&#112;&#x6f;&#115;&#116;&#109;&#x61;&#115;&#116;&#x65;&#x72;&#x40;&#x64;&#111;&#x6d;&#97;&#x69;&#110;&#x2e;&#99;&#111;&#x6d;</a> 且无法修改（domain.com 为您刚才设置的邮件域名）</p>
 <p><img src="https://coolbie.github.io/picx-images-hosting/images/2020/11/05.67xj2tx3ub.avif" alt="05"></p>
 <p>FreeBSD 版本只有 iRedAdmin、Roundcubemail、SOGo</p>
 <p><img src="https://coolbie.github.io/picx-images-hosting/images/2020/11/06.7zqhxqggqb.avif" alt="06"></p>
@@ -139,7 +139,7 @@
 <p>将括号内的文本去除引号与空格并相连就是咱们的 DKIM 数据，在解析中添加一条 dkim._domainkey 的 TXT 解析，内容就是咱们组合出的文本传，测试方式：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dig -t txt dkim._domainkey.free.gd @8.8.8.8</span><br><span class="line">nslookup -type=txt dkim._domainkey.free.gd 8.8.8.8</span><br></pre></td></tr></table></figure>
 
-<h3 id="DMARC-记录"><a href="#DMARC-记录" class="headerlink" title="DMARC 记录"></a>DMARC 记录</h3><p>DMARC 记录是当收件方检测到伪造邮件等行为时，将根据您的配置进行操作的一个记录，比如拒绝邮件或放入垃圾邮件以及不做处理等，同时会反馈一份检测报告到配置的邮箱地址内，添加方法就是增加一条 _dmarc 的 TXT 解析，内容为配置选项，比如 v&#x3D;DMARC1; p&#x3D;none; rua&#x3D;mailto:<a href="mailto:&#100;&#x6d;&#x61;&#114;&#99;&#64;&#x66;&#x72;&#101;&#101;&#46;&#103;&#100;">&#100;&#x6d;&#x61;&#114;&#99;&#64;&#x66;&#x72;&#101;&#101;&#46;&#103;&#100;</a>，检测方式：</p>
+<h3 id="DMARC-记录"><a href="#DMARC-记录" class="headerlink" title="DMARC 记录"></a>DMARC 记录</h3><p>DMARC 记录是当收件方检测到伪造邮件等行为时，将根据您的配置进行操作的一个记录，比如拒绝邮件或放入垃圾邮件以及不做处理等，同时会反馈一份检测报告到配置的邮箱地址内，添加方法就是增加一条 _dmarc 的 TXT 解析，内容为配置选项，比如 v&#x3D;DMARC1; p&#x3D;none; rua&#x3D;mailto:<a href="mailto:&#100;&#109;&#97;&#114;&#99;&#x40;&#102;&#114;&#x65;&#101;&#x2e;&#x67;&#100;">&#100;&#109;&#97;&#114;&#99;&#x40;&#102;&#114;&#x65;&#101;&#x2e;&#x67;&#100;</a>，检测方式：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dig -t txt _dmarc.free.gd @8.8.8.8</span><br><span class="line">nslookup -type=txt _dmarc.free.gd 8.8.8.8</span><br></pre></td></tr></table></figure>
 
 <h2 id="配置证书"><a href="#配置证书" class="headerlink" title="配置证书"></a>配置证书</h2><p>为了更好的体验，避免在使用网页版或客户端时出现不受信任证书的情况，咱们需要使用自己的可受信任的证书，Let’s Encrypt 证书就是非常不错的可受信任免费证书。</p>
