@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>使用OpenLiteSpeed创建WordPress并开启缓存 | 康诺&#39;S 小屋</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(/assets/header.png)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>康诺&#39;S 小屋</div>
+        
+            <div>一个中年大叔的日常记录</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a target="_blank" rel="noopener" href="https://github.com/ylqjgm">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>使用OpenLiteSpeed创建WordPress并开启缓存</h1>
+    </header>
+
+    <section>
+      <h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p>在上一篇文章中，康诺使用 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 开启了虚拟机，也就是俗称的VPS。</p>
+<p><a href="https://free.gd/hetzner-proxmox-ipv6-vps.html">Hetzner服务器内安装Proxmox并开通IPv6小鸡</a></p>
+<p>本篇，将会在开启出来的VPS中安装配置 <a target="_blank" rel="noopener" href="https://openlitespeed.org/">OpenLiteSpeed</a> 并创建一个 <a target="_blank" rel="noopener" href="https://wordpress.com/">WordPress</a> 博客程序，完成网站搭建。</p>
+<p>在搭建之前，随意介绍下今天的主角：OpenLiteSpeed</p>
+<blockquote>
+<p>OpenLiteSpeed 是 LiteSpeed EnterPrise 的社区版本，相较 Nginx 很多扩展如 Brotli、nginx-cache-purge 等扩展，会因为更新的不及时导致对最新Stable版本的不支持，同时也没有企业级的保障。 而 OpenLiteSpeed 的组件有官方进行主要维护和更新，提供商用企业级的体验。</p>
+</blockquote>
+<blockquote>
+<p>在性能上，LiteSpeed Tech 提供的 BenchMark 中，在 WordPress、Joomla、OpenCart、ModSecurity、小型静态文件、HTTP&#x2F;2、HTTP&#x2F;3 的测试上都比 Apache HTTPD 和 Nginx 有这更好的表现，这不仅仅是跑个 Hello World 而是进行一个完整的测试。</p>
+</blockquote>
+<p>总的来说，OpenLiteSpeed 就是一款比 <a target="_blank" rel="noopener" href="https://nginx.org/">Nginx</a>、<a target="_blank" rel="noopener" href="https://www.apache.org/">Apache</a> 等更优秀的商业开源版本的 Web 服务器软件，因为是商业公司开发，所以更新、修补及性能等有较好的保障，而且 OpenLiteSpeed 包含有一个插件 LSCache，这款插件是专门针对 WordPress 进行开发设计的，优化效果相较于其他缓存插件那是高了很多的。</p>
+<p>基于此，本文将会着重讲解 OpenLiteSpeed 的安装以及 LSCache 的使用。</p>
+<span id="more"></span>
+
+<h2 id="OpenLiteSpeed-安装"><a href="#OpenLiteSpeed-安装" class="headerlink" title="OpenLiteSpeed 安装"></a>OpenLiteSpeed 安装</h2><p>OpenLiteSpeed 有好几种方式，最简单的有官方的一键包，其他的还可以自己编译等等，这里就讲解一键包以及 <a target="_blank" rel="noopener" href="https://www.freebsd.org/">FreeBSD</a> 下编译两种方式吧。</p>
+<h2 id="官方一键包"><a href="#官方一键包" class="headerlink" title="官方一键包"></a>官方一键包</h2><p>直接输入命令进行安装配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate https://github.com/litespeedtech/ols1clk/raw/master/ols1clk.sh</span><br><span class="line">bash ols1clk.sh --adminpassword free.gd --email admin@free.gd --lsphp 81 --listenport 80 --ssllistenport 443</span><br></pre></td></tr></table></figure>
+
+<p>执行后，将会自动为您安装 OpenLiteSpeed，并配置管理员密码为 free.gd，管理员邮箱为 <a href="mailto:&#x61;&#x64;&#x6d;&#105;&#x6e;&#64;&#x66;&#114;&#x65;&#101;&#x2e;&#x67;&#100;">&#x61;&#x64;&#x6d;&#105;&#x6e;&#64;&#x66;&#114;&#x65;&#101;&#x2e;&#x67;&#100;</a>，以及安装 lsphp81，监听 80 及 443 两个 Web 端口，由于康诺在服务器上单独开设了一台小鸡作为 MySQL 数据库服务器，所以这里没有安装 MySQL，需要安装的可以看看下方的完整命令列表：</p>
+<blockquote>
+<p>–adminpassword [PASSWORD] To set the WebAdmin password for OpenLiteSpeed instead of using a random one.<br>–email [EMAIL] To set the administrator email.<br>–lsphp [VERSION] To set the LSPHP version, such as 80. We currently support versions ‘71 72 73 74 80 81’.<br>–mariadbver [VERSION] To set MariaDB version, such as 10.9. We currently support versions ‘10.2 10.3 …10.9’.<br>–wordpress To install WordPress. You will still need to complete the WordPress setup by browser<br>–wordpressplus [SITEDOMAIN] To install, set up, and configure WordPress, also LSCache will be enabled<br>–wordpresspath [WP_PATH] To specify a location for the new WordPress installation or use for an existing WordPress.<br>–dbrootpassword [PASSWORD] To set the database root password instead of using a random one.<br>–dbname [DATABASENAME] To set the database name to be used by WordPress.<br>–dbuser [DBUSERNAME] To set the WordPress username in the database.<br>–dbpassword [PASSWORD] To set the WordPress table password in MySQL instead of using a random one.<br>–prefix [PREFIXNAME] To set the WordPress table prefix.<br>–listenport [PORT] To set the HTTP server listener port, default is 80.<br>–ssllistenport [PORT] To set the HTTPS server listener port, default is 443.<br>–wpuser [WP_USER] To set the WordPress admin user for WordPress dashboard login. Default value is wpuser.<br>–wppassword [PASSWORD] To set the WordPress admin user password for WordPress dashboard login.<br>–wplang [WP_LANGUAGE] To set the WordPress language. Default value is “en_US” for English.<br>–sitetitle [WP_TITLE] To set the WordPress site title. Default value is mySite.<br>–pure-mariadb To install OpenLiteSpeed and MariaDB.<br>–with-mysql To install OpenLiteSpeed&#x2F;App with MySQL.<br>–proxy-r To set a proxy with rewrite type.<br>–proxy-c To set a proxy with config type.<br>–uninstall To uninstall OpenLiteSpeed and remove installation directory.<br>–purgeall To uninstall OpenLiteSpeed, remove installation directory, and purge all data in MySQL.<br>–quiet To use quiet mode, won’t prompt to input anything.<br>–version To display the script version information.<br>–verbose To display more messages during the installation.<br>–update To update ols1clk from github.<br>–help To display help messages.</p>
+</blockquote>
+<h2 id="源码编译"><a href="#源码编译" class="headerlink" title="源码编译"></a>源码编译</h2><p>这里使用 FreeBSD 作为解说，描述下在 FreeBSD 下如何进行 OpenLiteSpeed 的源码编译。</p>
+<p>首先更新 ports：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">portsnap fetch extract</span><br></pre></td></tr></table></figure>
+
+<p>接着依次安装以下组件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/ports/devel/pcre; make install clean; rehash;</span><br><span class="line">cd /usr/ports/devel/rcs; make install clean; rehash;</span><br><span class="line">cd /usr/ports/dns/udns; make install clean; rehash;</span><br><span class="line">cd /usr/ports/textproc/expat2; make install clean; rehash;</span><br><span class="line">cd /usr/ports/security/openssl; make install clean; rehash;</span><br><span class="line">cd /usr/ports/lang/perl5.26; make install clean; rehash;</span><br></pre></td></tr></table></figure>
+
+<p>下载 OpenLiteSpeed 源码到本地，解压并安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fetch https://openlitespeed.org/packages/openlitespeed-1.7.16.src.tgz</span><br><span class="line">tar zxf openlitespeed-1.7.16.src.tgz</span><br><span class="line">cd openlitespeed-1.7.16</span><br><span class="line">./configure --with-pcre=/usr/local</span><br></pre></td></tr></table></figure>
+
+<h2 id="OpenLiteSpeed-配置"><a href="#OpenLiteSpeed-配置" class="headerlink" title="OpenLiteSpeed 配置"></a>OpenLiteSpeed 配置</h2><p>OpenLiteSpeed 已经安装完成，接着，咱们输入 <a target="_blank" rel="noopener" href="https://ip:7080/">https://ip:7080</a> 访问 OpenLiteSpeed 控制面板（没错，自带了控制面板），可却发现打不开，什么情况？</p>
+<p>这是由于 OpenLiteSpeed 默认监听 IPv4，而不监听 IPv6 的原因，这就导致咱们直接使用 IPv6 无法访问，此时登录服务器，并修改 &#x2F;usr&#x2F;local&#x2F;lsws&#x2F;admin&#x2F;conf&#x2F;admin_config.conf 文件，将其中的 *:7080 修改为 [ANY]:7080，然后执行重启</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/lsws/bin/lswsctrl restart</span><br></pre></td></tr></table></figure>
+
+<p>再次打开控制面板，并输入帐号名称 admin 及自己配置或程序随机生成的密码登录控制面板。</p>
+<p><img src="https://img.free.gd/202011/01.4n7s37h0w4.webp" alt="01.webp"></p>
+<p>登录后，在控制面板右上角可以修改语言为中文。</p>
+<p><img src="https://img.free.gd/202011/02.6t76oz8on8.webp" alt="02.webp"></p>
+<p>点击左侧的 虚拟主机，并点击 “+” 添加一个虚拟主机并填写网站基本信息。</p>
+<p><img src="https://img.free.gd/202011/03.1e8o6jtj9h.webp" alt="03.webp"></p>
+<p>点击保存图标保存，会出现 file &#x2F;usr&#x2F;local&#x2F;lsws&#x2F;conf&#x2F;vhosts&#x2F;free.gd&#x2F;vhconf.conf does not exist. CLICK TO CREATE 这样的一段提示，咱们点击 CLICK TO CREATE 创建配置文件后再次提交即可，接着按照提示一步一步的完成即可。</p>
+<p>配置完成后发现依然无法打开网站，这是因为还没有将网站添加到监听的端口中。</p>
+<p>点击左侧 监听器，可以看到后台已经默认配置了两个监听接口，一个是 HTTP 的 80 端口，一个是 HTTPS 的 443 端口。</p>
+<p>接下来，依次点击 放大镜，并点击 “+” 将自己刚才创建的虚拟主机加入到接口中，记住两个端口都要添加！</p>
+<p><img src="https://img.free.gd/202011/04.6bh50e7b2d.webp" alt="04.webp"></p>
+<p>此时，咱们网站也创建完成了，到 MySQL 服务器中创建一个数据库及专属用户，接着在网站服务器中执行命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /srv/www/free.gd</span><br><span class="line">cd /srv/www/free.gd</span><br><span class="line">fetch https://WordPress.org/latest.tar.gz</span><br><span class="line">tar zxf latest.tar.gz</span><br><span class="line">rm -f latest.tar.gz</span><br><span class="line">mv WordPress public_html</span><br><span class="line">chown -R nobody:nogroup /srv/www/free.d</span><br><span class="line">chmod -R 755 /srv/www/free.gd</span><br><span class="line">/usr/local/lsws/bin/lswsctrl restart</span><br></pre></td></tr></table></figure>
+
+<p>访问域名开始安装 WordPress。</p>
+<h2 id="LSCache配置"><a href="#LSCache配置" class="headerlink" title="LSCache配置"></a>LSCache配置</h2><p>在 WordPress 后台安装插件 LiteSpeed Cache 并激活，根据自己的需要进行自定义配置，这里最主要记得开启 对象缓存 与 即时点击，其余自行决定。</p>
+<p><img src="https://img.free.gd/202011/05.8hgjm5yyth.webp" alt="05.webp"></p>
+<p><img src="https://img.free.gd/202011/06.70aekeuu2u.webp" alt="06.webp"></p>
+<p><img src="https://img.free.gd/202011/07.1zibsunzk6.webp" alt="07.webp"></p>
+<p>完成以上步骤后，已经基本OK，不过，为了更好的缓存效果，咱们回到 OpenLiteSpeed 控制面板，进入刚才添加的虚拟主机中，在 资源集 下依次添加几条静态规则。</p>
+<p><strong>第一条</strong></p>
+<blockquote>
+<p>URI: &#x2F;wp-content&#x2F;cache&#x2F;js&#x2F;<br>位置: $DOC_ROOT&#x2F;wp-content&#x2F;cache&#x2F;js&#x2F;<br>可访问: yes<br>启用过期: yes<br>按类型过期: application&#x2F;x-javascript&#x3D;A15552000,<br>text&#x2F;javascript&#x3D;A15552000, application&#x2F;javascript&#x3D;A15552000<br>头部操作:<br>unset Cache-control set Cache-control public, max-age&#x3D;15552000 set<br>Access-Control-Allow-Origin: *</p>
+</blockquote>
+<p><strong>第二条</strong></p>
+<blockquote>
+<p>URI: &#x2F;wp-content&#x2F;cache&#x2F;css&#x2F;<br>位置: $DOC_ROOT&#x2F;wp-content&#x2F;cache&#x2F;css&#x2F;<br>可访问: yes<br>启用过期: yes<br>按类型过期: text&#x2F;css&#x3D;A15552000<br>头部操作:<br>unset Cache-control<br>set Cache-control public, max-age&#x3D;15552000<br>set Access-Control-Allow-Origin: *</p>
+</blockquote>
+<p><strong>第三条</strong></p>
+<blockquote>
+<p>URI: exp:^.*(gif|ico|jpeg|jpg|png|webp|woff|woff2|fon|fot|ttf)位置:DOC_ROOT&#x2F;$0<br>可访问: yes<br>启用过期: yes<br>按类型过期: text&#x2F;css&#x3D;A15552000, image&#x2F;gif&#x3D;A15552000, image&#x2F;x-icon&#x3D;A15552000, image&#x2F;jpeg&#x3D;A15552000, application&#x2F;x-javascript&#x3D;A15552000, text&#x2F;javascript&#x3D;A15552000, application&#x2F;javascript&#x3D;A15552000, image&#x2F;png&#x3D;A15552000, image&#x2F;webp&#x3D;A15552000, font&#x2F;ttf&#x3D;A15552000, font&#x2F;woff&#x3D;A15552000, font&#x2F;woff2&#x3D;A15552000, application&#x2F;x-font-ttf&#x3D;A15552000, application&#x2F;x-font-woff&#x3D;A15552000, application&#x2F;font-woff&#x3D;A15552000, application&#x2F;font-woff2&#x3D;A15552000<br>头部操作:<br>unset Cache-control<br>set Cache-control public, max-age&#x3D;15552000<br>set Access-Control-Allow-Origin: *</p>
+</blockquote>
+<p>完成后效果如图</p>
+<p><img src="https://img.free.gd/202011/08.1sf3xf1u4m.webp" alt="08.webp"></p>
+<p>完成后再次重启即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/lsws/bin/lswsctrl restart</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2020-11-20T14:01:51.000Z" itemprop="datePublished">
+              2020-11-20
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/LSCache/">LSCache</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/OpenLiteSpeed/">OpenLiteSpeed</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/WordPress/">WordPress</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2024 - 康诺 </div>
+    <div>
+        <span>
+            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a target="_blank" rel="noopener" href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+
+<script src="/js/pager/dist/singlepager.js"></script>
+
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>

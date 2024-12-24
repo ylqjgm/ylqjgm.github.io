@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Hetzner服务器内安装Proxmox并开通IPv6小鸡 | 康诺&#39;S 小屋</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(/assets/header.png)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>康诺&#39;S 小屋</div>
+        
+            <div>一个中年大叔的日常记录</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a target="_blank" rel="noopener" href="https://github.com/ylqjgm">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Hetzner服务器内安装Proxmox并开通IPv6小鸡</h1>
+    </header>
+
+    <section>
+      <h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p><del><strong>内容已失效，因 Hetzner 原因，容易造成 MAC 警告导致封号</strong></del></p>
+<p><a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 是一家提供廉价服务器的德国供应商，独立服务器价格低廉，性价比高，受到很多网友的喜爱。</p>
+<p>本站也是建立在 <a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 中，使用 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 进行 VPS 管理，再搭配 <a target="_blank" rel="noopener" href="https://www.cloudflare.com/">Cloudflare</a> 进行 <strong>CDN</strong> 加速。</p>
+<p>本文主要介绍如何在 <a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 中构建 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a>，并进行 <strong>VPS</strong> 开设，图文内容较多，请耐心阅读。</p>
+<span id="more"></span>
+
+<h2 id="系统安装"><a href="#系统安装" class="headerlink" title="系统安装"></a>系统安装</h2><p>在购买并开通了 <a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 后，我们将得到一个管理帐号及密码，然后登录管理系统 <a target="_blank" rel="noopener" href="https://robot.hetzner.com/">Robot</a>，登录后可查看自己的服务器信息。</p>
+<p>点击 <strong>Rescue</strong> 进入恢复模式配置界面进行配置，并记下配置后给的 SSH 密码</p>
+<p><img src="https://img.free.gd/202011/01.5q7he2tvr0.webp" alt="01"></p>
+<p><img src="https://img.free.gd/202011/02.7egub9k5x8.webp" alt="02"></p>
+<p>完成后以此点击 <strong>Reset —— Execute an automatic hardware reset</strong>，服务器会重启，等待能够 <strong>Ping</strong> 通后即可登录服务器</p>
+<p><img src="https://img.free.gd/202011/03.8s3dfav7y5.webp" alt="03"></p>
+<p>使用 <strong>SSH</strong> 登录服务器，并输入 <strong>installimage</strong> 安装系统</p>
+<p><img src="https://img.free.gd/202011/04.41y4gw3lkt.webp" alt="04"></p>
+<p>选择安装 <a target="_blank" rel="noopener" href="https://www.debian.org/">Debian</a> 进入，并安装最新版，选择完成后会要求配置硬件数据。</p>
+<p><img src="https://img.free.gd/202011/05.2h8dhf6e4d.webp" alt="05"></p>
+<p>我这里设置为 <strong>raid 0</strong>，最大化应用硬盘</p>
+<p><img src="https://img.free.gd/202011/06.3nroq0vapp.webp" alt="06"></p>
+<p>接着配置分区，按自己需求进行配置即可</p>
+<p><img src="https://img.free.gd/202011/07.2rv7aklm9q.webp" alt="07"></p>
+<p>配置完成后按下 <strong>F10</strong> 确认，随后一路确定，系统会自动为服务器进行安装配置</p>
+<p><img src="https://img.free.gd/202011/08.5q7he2tvr2.webp" alt="08"></p>
+<p><img src="https://img.free.gd/202011/09.45r07skxq.webp" alt="09"></p>
+<p>安装完成后键入 <strong>reboot</strong> 重启系统，重启完成后重新登录就是已安装完成的 <a target="_blank" rel="noopener" href="https://www.debian.org/">Debian</a> 系统。</p>
+<h2 id="Proxmox安装"><a href="#Proxmox安装" class="headerlink" title="Proxmox安装"></a>Proxmox安装</h2><p><a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 是使用 <a target="_blank" rel="noopener" href="https://www.debian.org/">Debian</a> 作为基础系统进行开发的，我们刚才已经把 <a target="_blank" rel="noopener" href="https://www.debian.org/">Debian</a> 安装到了服务器中，接着就在 Debian 上构建 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 即可。</p>
+<p>在安装之前，我们要确认自己的主机名是否配置正确，键入命令后若看到自己的 <strong>IP</strong> 地址，就证明自己主机名是正确的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname --ip-address</span><br></pre></td></tr></table></figure>
+
+<p>添加 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 源</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;deb http://download.proxmox.com/debian/pve buster pve-no-subscription&quot; &gt; /etc/apt/sources.list.d/pve-install-repo.list</span><br><span class="line">wget http://download.proxmox.com/debian/proxmox-ve-release-6.x.gpg -O /etc/apt/trusted.gpg.d/proxmox-ve-release-6.x.gpg</span><br><span class="line">chmod +r /etc/apt/trusted.gpg.d/proxmox-ve-release-6.x.gpg</span><br></pre></td></tr></table></figure>
+
+<p>更新系统</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt update &amp;&amp; apt full-upgrade</span><br><span class="line">aptitude -q -y purge firmware-bnx2x firmware-realtek firmware-linux firmware-linux-free firmware-linux-nonfree</span><br></pre></td></tr></table></figure>
+
+<p>安装 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install proxmox-ve postfix open-iscsi</span><br></pre></td></tr></table></figure>
+
+<p>官方推荐删除 <strong>os-prober</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt remove os-prober</span><br></pre></td></tr></table></figure>
+
+<p>完成后重启并删除 [Debian][9] 内核，更新引导</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt remove linux-image-amd64 &#x27;linux-image-4.19*&#x27;</span><br><span class="line">update-grub</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 配置</p>
+<p>我们完成了 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 的安装后，需要对 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 进行配置，配置的主要内容在于网络配置，这是由于 <a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 网络的特殊性所致，由于 <a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 所用网络是将 <strong>IP</strong> 与 <strong>MAC</strong> 地址进行绑定，所以在配置时与其他服务器稍显不同，这里一定要注意。</p>
+<p>打开网络配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/network/interfaces</span><br></pre></td></tr></table></figure>
+
+<p>对网络进行配置</p>
+<blockquote>
+<h3 id="Hetzner-Online-GmbH-installimage-source-etc-network-interfaces-d-auto-lo-iface-lo-inet-loopback-iface-lo"><a href="#Hetzner-Online-GmbH-installimage-source-etc-network-interfaces-d-auto-lo-iface-lo-inet-loopback-iface-lo" class="headerlink" title="Hetzner Online GmbH installimage source &#x2F;etc&#x2F;network&#x2F;interfaces.d&#x2F;* auto lo iface lo inet loopback iface lo"></a>Hetzner Online GmbH installimage source &#x2F;etc&#x2F;network&#x2F;interfaces.d&#x2F;* auto lo iface lo inet loopback iface lo</h3><p>inet6 loopback auto enp2s0 iface enp2s0 inet manual up sysctl -p up ip<br>route add 136.xxx.xxx.2&#x2F;32 dev enp2s0 auto vmbr0 iface vmbr0 inet<br>static address 136.xxx.xxx.1 netmask 255.255.255.224 gateway<br>136.xxx.xxx.3 bridge_ports enp2s0 bridge_stp off bridge_fd 0 iface vmbr0 inet6 static address 2a01:xxx:xxx:xxx::xxx:a01 netmask 120<br>gateway fe80::1 auto vmbr1 iface vmbr1 inet static address 10.10.10.1<br>netmask 255.255.255.0 bridge_ports none bridge_stp off bridge_fd 0<br>post-up iptables -t nat -A POSTROUTING -s ‘10.10.10.0&#x2F;24’ -o vmbr0 -j<br>MASQUERADE post-down iptables -t nat -D POSTROUTING -s ‘10.10.10.0&#x2F;24’<br>-o vmbr0 -j MASQUERADE</p>
+</blockquote>
+<p>这里需要注意几个地方：</p>
+<blockquote>
+<ol>
+<li>enp2s0代表服务器的网卡</li>
+<li>136.xxx.xxx.2&#x2F;32是额外独立IP地址，有多少加多少</li>
+<li>136.xxx.xxx.1是服务器主IP地址，不要配置错误</li>
+<li>136.xxx.xxx.3是服务器主IP地址的网关地址</li>
+<li>2a01:xxx:xxx:xxx::xxx:a01是Hetzner给我的IPv6地址</li>
+<li>10.10.10.1是为了内网互通配置的内网地址</li>
+</ol>
+</blockquote>
+<p>这里稍微做一下解释：</p>
+<p>首先咱们为服务器网卡建立一个桥接网卡，并命名为 <strong>vmbr0</strong>，然后为桥接网卡配置对应的 <strong>IP</strong> 信息，其中 <strong>IPv4</strong> 地址就是服务器的主 <strong>IP</strong> 地址，而 <strong>IPv6</strong> 地址，<a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 给的是一个 <strong>&#x2F;64</strong> 网段，不过康诺只给 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 分配了一个 <strong>&#x2F;120</strong> 的地址，作为 <strong>VPS</strong> 的网关使用。</p>
+<p>接着还建立一个新的虚拟网卡 <strong>vmbr1</strong>，这张网卡仅作为内网使用，所有数据均通过 <strong>vmbr0</strong> 进行通讯。</p>
+<p>完成网络配置后，还需要开启 <strong>IP</strong> 转发功能，否则刚才的配置毫无意义，而一般的 <strong>IP</strong> 转发都是配置在 <strong>sysctl.conf</strong> 文件中，但 <a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 的是配置在这个文件：**&#x2F;etc&#x2F;sysctl.d&#x2F;99-hetzner.conf**</p>
+<p>在文件最后加入内容</p>
+<blockquote>
+<p>net.ipv4.ip_forward&#x3D;1<br>net.ipv6.conf.all.forwarding&#x3D;1</p>
+</blockquote>
+<p>完成后再次重启系统</p>
+<p><strong>VPS</strong> 开设</p>
+<p>此时，咱们可以通过 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 创建 <strong>VPS</strong> 了，登录 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 管理界面地址：<strong><a target="_blank" rel="noopener" href="https://your-ip:8006/">https://your-ip:8006</a></strong></p>
+<p>在右上角 <strong>创建虚拟机</strong> 与 <strong>创建CT</strong> 两个按钮，其中虚拟机是 <strong>KVM</strong> 类型，<strong>CT</strong> 则是 <strong>LXC</strong> 类型，简单说就是 <strong>CT</strong> 仅支持 <strong>Linux</strong>，可通过模板快速创建，<strong>KVM</strong> 需要通过 <strong>ISO</strong> 进行安装</p>
+<p>咱们创建一个 <strong>LXC</strong> 小鸡，一路配置到网络这里，首先选择 <strong>vmbr0</strong> 网卡进行 <strong>IPv6</strong> 配置，直接配置为静态 <strong>IP</strong>，且使用 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 的主 <strong>IPv6</strong> 作为网关地址，创建完成后，再添加一个网卡 <strong>vmbr1</strong>，并填入内网地址，此时，<strong>VPS</strong> 已经开通完成，若配置没有问题，在 <strong>VPS</strong> 内可 <strong>PING</strong> 通外网，外网也可通过 <strong>IPv6</strong> 地址访问 <strong>VPS</strong>。</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2020-11-20T09:25:14.000Z" itemprop="datePublished">
+              2020-11-20
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/Hetzner/">Hetzner</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/IPv6/">IPv6</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Proxmox/">Proxmox</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/VPS/">VPS</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2024 - 康诺 </div>
+    <div>
+        <span>
+            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a target="_blank" rel="noopener" href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+
+<script src="/js/pager/dist/singlepager.js"></script>
+
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>

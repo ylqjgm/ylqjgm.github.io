@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>KVM下通过DD方式安装Windows | 康诺&#39;S 小屋</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(/assets/header.png)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>康诺&#39;S 小屋</div>
+        
+            <div>一个中年大叔的日常记录</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a target="_blank" rel="noopener" href="https://github.com/ylqjgm">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>KVM下通过DD方式安装Windows</h1>
+    </header>
+
+    <section>
+      <h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p>目前大多数 VPS 都是仅支持 Linux&#x2F;Unix 类系统，而使用 Windows 系统则需要支付一定的授权费用，这对于国内很多站长来说是很困难的，那有没有一种方法能够在不支付授权费的情况下可使用 Windows 系统呢？</p>
+<p>本文讲解基础为 Proxmox 下安装的 KVM 虚拟机，同时也支持 Xen 等大多数全虚拟化 VPS，使用此方法，可通过直接写入硬盘的方式，将 Windows 安装到自己的 VPS 中，达到偷渡式的 Windows 使用。</p>
+<p>注意，此方式仅可保证能够正常安装 Windows，若因偷用 Windows 而产生的版权原因等，本站概不负责！</p>
+<span id="more"></span>
+
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>首先准备一台 KVM 或 Xen 类型的 VPS 虚拟机，同时给 VPS 安装一个 Debian 的操作系统，使用 SSH 登录到 VPS 中，执行以下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt install wget net-tools -y</span><br><span class="line">wget qiu.sh/dd -O dd.sh</span><br></pre></td></tr></table></figure>
+
+<p>接着查看下自己的网络配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/network/interfaces</span><br></pre></td></tr></table></figure>
+
+<p><strong>IPv4</strong>：</p>
+<blockquote>
+<p>address 123.123.123.123<br>netmask 255.255.255.252<br>gateway 123.123.123.122</p>
+</blockquote>
+<p><strong>IPv6</strong>：</p>
+<blockquote>
+<p>address 2606:4700:4700:1111::2<br>netmask 64<br>gateway 2606:4700:4700:1111::1</p>
+</blockquote>
+<p>写入 Windows IPv4 环境</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bash dd.sh \</span><br><span class="line">-dd &quot;https://fr1.teddyvps.com/iso/cn_windows2019_v2.gz&quot; \</span><br><span class="line">--ip-addr &quot;123.123.123.123&quot; \</span><br><span class="line">--ip-mask &quot;255.255.255.255&quot; \</span><br><span class="line">--ip-gate &quot;123.123.123.122&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="纯IPv6环境"><a href="#纯IPv6环境" class="headerlink" title="纯IPv6环境"></a>纯IPv6环境</h2><p>因脚本会自动设置 DNS 服务器为 8.8.8.8，故此为了兼容纯 IPv6 环境，需替换为 IPv6 地址，这里选择 Cloudflare 的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sed -i &#x27;s@d-i netcfg/get_nameservers string 8.8.8.8@d-i netcfg/get_nameservers string 2606:4700:4700::1111@g&#x27; dd.sh</span><br><span class="line">bash dd.sh \</span><br><span class="line">-dd &quot;https://fr1.teddyvps.com/iso/cn_windows2019_v2.gz&quot; \</span><br><span class="line">--ip-addr &quot;2606:4700:4700:1111::2/64&quot; \</span><br><span class="line">--ip-mask &quot;2606:4700:4700:1111:ffff:ffff:ffff:ffff&quot; \</span><br><span class="line">--ip-gate &quot;2606:4700:4700:1111::1&quot;</span><br></pre></td></tr></table></figure>
+
+<p>此处需要注意，自己的 IPv6 掩码是多少，这个可以网上找个计算器计算下。</p>
+<p>若在安装过程中出现“Starting up the partitioner”一直不动的情况，请勿担心，DD 的时候是不会动的，耐心等待即可，完成后系统会自动重启。</p>
+<p>当 Windows 安装完成后，即可使用远程桌面进行连接，默认帐号：administrator，默认密码：Teddysun.com</p>
+<p>新安装的 Windows 并没有自动激活，需手动激活，本文中的 DD 包是来自 秋水逸冰 的 Windows Server 2019 Datacenter，请自行网络搜索 KMS 激活方法</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2020-12-02T14:46:53.000Z" itemprop="datePublished">
+              2020-12-02
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/DD/">DD</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/KVM/">KVM</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Windows/">Windows</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2024 - 康诺 </div>
+    <div>
+        <span>
+            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a target="_blank" rel="noopener" href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+
+<script src="/js/pager/dist/singlepager.js"></script>
+
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>

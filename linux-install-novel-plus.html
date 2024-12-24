@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Linux下安装小说精品屋Plus | 康诺&#39;S 小屋</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(/assets/header.png)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>康诺&#39;S 小屋</div>
+        
+            <div>一个中年大叔的日常记录</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a target="_blank" rel="noopener" href="https://github.com/ylqjgm">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Linux下安装小说精品屋Plus</h1>
+    </header>
+
+    <section>
+      <h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p><a target="_blank" rel="noopener" href="https://github.com/201206030/novel-plus">小说精品屋Plus</a> 是一款 Java 语言编写的在线小说阅读系统，具有极快的采集速度以及简便的搭建方式，本文将以 Ubuntu 为基础，对 小说精品屋Plus 进行搭建。</p>
+<p>演示地址：<del><a target="_blank" rel="noopener" href="https://book.free.gd/">https://book.free.gd</a></del></p>
+<span id="more"></span>
+
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>本次选用的操作系统为 Ubuntu 20.04，系统安装完成后，需要安装 MySQL 以及 JDK8，MySQL 的安装不多重复，这里简单说下 JDK 的安装。</p>
+<p>网上很多人介绍 JDK 安装时都是直接在官网下载，但目前官网已经启用了登录下载模式，这样极不方便，本次安装选择使用 apt 安装，安装命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install openjdk-8-jdk</span><br></pre></td></tr></table></figure>
+
+<p>接着就是创建数据库以及用户：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE book <span class="keyword">DEFAULT</span> <span class="keyword">CHARACTER SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> book.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;book&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;bookpasswd&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样就创建了一个数据库 book，同时创建了一个用户 book，密码为 bookpasswd</p>
+<h2 id="程序更改"><a href="#程序更改" class="headerlink" title="程序更改"></a>程序更改</h2><p>将程序包下载到服务器并解压：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/201206030/novel-plus/releases/download/v3.0.2/novel-plus-install-v3.0.2.zip -O ~/novel.zip</span><br><span class="line">unzip novel.zip</span><br><span class="line">cd ~/novel-plus-install-v3.0.2</span><br></pre></td></tr></table></figure>
+
+<p>解压后会出现四个目录，分别是：</p>
+<blockquote>
+<p>novel-admin：程序后台（个人觉得没什么用）<br>novel-crawl：爬虫程序<br>novel-front：程序前台<br>sql：数据库文件</p>
+</blockquote>
+<p>将 sql 文件导入数据库：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -ubook -pbookpasswd book &lt; sql/novel_plus.sql</span><br></pre></td></tr></table></figure>
+
+<p>接着修改每个文件夹下的 .yml 文件，主要是修改数据库连接信息：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">jdbc:mysql://127.0.0.1:3306/novel_plus?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=Asia/Shanghai</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>username: root<br>password: root<br>127.0.0.1:3306 修改为自己的 MySQL 地址与端口<br>novel_plus 修改为自己的数据库名称<br>username 为数据库连接用户名<br>password 为数据库连接密码</p>
+</blockquote>
+<p>同时关注下各程序所运行的端口号：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#端口号</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="string">80xx</span></span><br></pre></td></tr></table></figure>
+
+<p>前台文件夹的 yml 文件中，有一项可以修改图片的保存方式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">pic:</span></span><br><span class="line">  <span class="attr">save:</span></span><br><span class="line">    <span class="comment">#图片保存方式, 1不保存，使用网络图片 ，2本地保存</span></span><br><span class="line">    <span class="attr">type:</span> <span class="number">2</span></span><br><span class="line">    <span class="comment">#图片保存路径</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">/var/pic</span></span><br></pre></td></tr></table></figure>
+
+<p>爬虫文件夹的 yml 文件中，有一项是修改爬虫系统管理员信息的：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#登录用户名密码</span></span><br><span class="line"><span class="attr">admin:</span></span><br><span class="line">  <span class="attr">username:</span> <span class="string">admin</span></span><br><span class="line">  <span class="attr">password:</span> <span class="string">admin</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="程序运行"><a href="#程序运行" class="headerlink" title="程序运行"></a>程序运行</h2><p>当完成修改后，即可运行程序，所有程序都是分别运行，互不干扰却又互相依赖。</p>
+<p>需要全部运行则依次执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd ~/novel-plus-install-v3.0.2/novel-front</span><br><span class="line">setsid java -jar novel-front-3.0.2.jar</span><br><span class="line">cd ~/novel-plus-install-v3.0.2/novel-crawl</span><br><span class="line">setsid java -jar novel-crawl-3.0.2.jar</span><br><span class="line">cd ~/novel-plus-install-v3.0.2/novel-admin</span><br><span class="line">setsid java -jar novel-admin-2.11.0.jar</span><br></pre></td></tr></table></figure>
+
+<p>接下来，根据 程序运行 文件中各程序的运行端口号，即可通过 <a href="http://ip:port/">http://ip:port/</a> 方式打开程序了！</p>
+<h2 id="爬虫执行"><a href="#爬虫执行" class="headerlink" title="爬虫执行"></a>爬虫执行</h2><p>爬虫程序需要通过网页来开启，若未修改，一般爬虫程序的运行端口为 8083，咱们用浏览器打开 <a href="http://ip:8083，可看到一个登录界面，输入爬虫配置文件中的用户名及密码即可登录。">http://ip:8083，可看到一个登录界面，输入爬虫配置文件中的用户名及密码即可登录。</a></p>
+<p>这里需要注意下，也不知道是本地网络问题还是什么，每次打开都必须要禁用缓存，否则不会出现源列表，若各位没有此问题，那直接启动采集即可。</p>
+<p>爬虫启动后，稍等片刻，即可看到小说飞快的涌入网站数据库中，真心的很快！</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2020-12-05T09:40:52.000Z" itemprop="datePublished">
+              2020-12-05
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/%E5%B0%8F%E8%AF%B4/">小说</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Linux/">Linux</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2024 - 康诺 </div>
+    <div>
+        <span>
+            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a target="_blank" rel="noopener" href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+
+<script src="/js/pager/dist/singlepager.js"></script>
+
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>FreeBSD下安装iRedMail搭建自己的邮件服务器 | 康诺&#39;S 小屋</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(/assets/header.png)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>康诺&#39;S 小屋</div>
+        
+            <div>一个中年大叔的日常记录</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a target="_blank" rel="noopener" href="https://github.com/ylqjgm">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>FreeBSD下安装iRedMail搭建自己的邮件服务器</h1>
+    </header>
+
+    <section>
+      <h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p>对于很多站长来说，拥有一个属于自己的域名邮箱是一件理所当然的事，而对于域名邮箱，一般来说是直接使用各大服务商提供的服务，比如 腾讯云、阿里云、或者 Google 等等，但是否想过搭建一个属于自己的私人域名邮箱服务器呢？</p>
+<p>本文将讲解如何在自己的服务器上搭建一个属于自己的邮件服务器，本次选择使用 <a target="_blank" rel="noopener" href="https://freebsd.org/">FreeBSD</a> 作为服务器，使用 <a target="_blank" rel="noopener" href="https://www.iredmail.org/">iRedMail</a> 作为搭建程序。</p>
+<span id="more"></span>
+
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>在开始搭建前，请先确认您具备了以下条件：</p>
+<blockquote>
+<ol>
+<li>一台服务器或VPS（最低 2GB 内存）</li>
+<li>一个拥有管理权限的域名</li>
+<li>一个独立的公网 IPv4 地址（支持设置 rDNS 解析）</li>
+<li>一定的命令行操作基础</li>
+</ol>
+</blockquote>
+<h2 id="系统安装"><a href="#系统安装" class="headerlink" title="系统安装"></a>系统安装</h2><p>本次操作，依然在 Proxmox 内进行，由于 FreeBSD 属于 Unix 类系统，所以无法在 Proxmox 中直接以 LXC 方式创建，需要创建为 KVM，首先将 FreeBSD 镜像下载到 Proxmox 服务器 &#x2F;var&#x2F;lib&#x2F;vz&#x2F;template&#x2F;iso 目录中，随后跟着下面图示开始创建虚拟机。</p>
+<p>选择下载的 FreeBSD 安装镜像文件，并设置类型为 Other</p>
+<p>选择硬盘总线设备为 VirtIO，其余设置请根据自身需求进行设置，这里推荐内存最低 4GB 以上。</p>
+<p>配置完成后可启动虚拟机，进入安装引导，安装过程略过，注意设置自己的主机名为 mail.free.gd 或 mx.free.gd 这样的格式，不要直接使用根域名</p>
+<p>重启完成安装，并登录系统执行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">portsnap fetch extract update</span><br><span class="line">pkg install bash-static</span><br></pre></td></tr></table></figure>
+
+<h2 id="iRedMail-搭建"><a href="#iRedMail-搭建" class="headerlink" title="iRedMail 搭建"></a>iRedMail 搭建</h2><p>确认自己的主机名称设置正确</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname -f</span><br></pre></td></tr></table></figure>
+
+<p>查看结果是否为自己配置的主机名称，如 mail.free.gd，若不是，请修改 &#x2F;etc&#x2F;rc.conf，内容为</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname=&quot;mail.domain.com&quot;</span><br></pre></td></tr></table></figure>
+
+<p>下载最新版 iRedMail 安装程序并启动安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fetch https://github.com/iredmail/iRedMail/archive/1.3.2.tar.gz</span><br><span class="line">tar zxf 1.3.2.tar.gz</span><br><span class="line">cd iRedMail-1.3.2/</span><br><span class="line">bash iRedMail.sh</span><br></pre></td></tr></table></figure>
+
+<p>根据提示完成配置，由于安装时忘记截图，这里直接使用官方的图片</p>
+<p><img src="https://img.free.gd/202011/01.9gwmzcifcw.webp" alt="01.webp"></p>
+<p><img src="https://img.free.gd/202011/02.39l8z6mo8x.webp" alt="02.webp"></p>
+<p><img src="https://img.free.gd/202011/03.41y4gx39z5.webp" alt="03.webp"></p>
+<p>这里可设置为根域名</p>
+<p><img src="https://img.free.gd/202011/04.7ax8dkqrlt.webp" alt="04.webp"></p>
+<p>默认管理员帐号为 <a href="mailto:&#112;&#111;&#x73;&#x74;&#x6d;&#97;&#115;&#116;&#x65;&#x72;&#x40;&#x64;&#111;&#109;&#97;&#x69;&#110;&#x2e;&#x63;&#111;&#x6d;">&#112;&#111;&#x73;&#x74;&#x6d;&#97;&#115;&#116;&#x65;&#x72;&#x40;&#x64;&#111;&#109;&#97;&#x69;&#110;&#x2e;&#x63;&#111;&#x6d;</a> 且无法修改（domain.com 为您刚才设置的邮件域名）</p>
+<p><img src="https://img.free.gd/202011/05.1ovhzppgsi.webp" alt="05.webp"></p>
+<p>FreeBSD 版本只有 iRedAdmin、Roundcubemail、SOGo</p>
+<p><img src="https://img.free.gd/202011/06.2vet8beddu.webp" alt="06.webp"></p>
+<p>输入 y 确认安装</p>
+<p><img src="https://img.free.gd/202011/07.4uazynjvpf.webp" alt="07.webp"></p>
+<p>完成后重启服务器</p>
+<h2 id="解析设置"><a href="#解析设置" class="headerlink" title="解析设置"></a>解析设置</h2><p>此时您已经完成了系统的搭建，若尝试发送或接收邮件，会发现无法实现，这是因为咱们还没有完成域名解析的工作。</p>
+<p>此处以一下数据作为演示：</p>
+<blockquote>
+<p>根域名 free.gd<br>邮件域名 mail.free.gd<br>公网地址 104.216.2.154</p>
+</blockquote>
+<h3 id="rDNS-解析"><a href="#rDNS-解析" class="headerlink" title="rDNS 解析"></a>rDNS 解析</h3><p>rDNS 解析也就是 PTR，此项解析是针对 IP 地址的，需要您的服务器或 VPS 服务商提供此功能才可设置，而设置 rDNS 的作用是为了避免邮件被判定为垃圾邮件。</p>
+<p>设置方法就是根据服务商提示自己手动配置或直接要求服务商帮忙配置，检测方法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dig -x 104.216.2.154 @8.8.8.8</span><br><span class="line">nslookup 104.216.2.154 8.8.8.8</span><br></pre></td></tr></table></figure>
+
+<h3 id="A-记录"><a href="#A-记录" class="headerlink" title="A 记录"></a>A 记录</h3><p>将 mail.free.gd 的 A 记录指向 104.216.2.154，检测方式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dig mail.free.gd @8.8.8.8</span><br><span class="line">nslookup mail.free.gd 8.8.8.8</span><br></pre></td></tr></table></figure>
+
+<h3 id="MX-记录"><a href="#MX-记录" class="headerlink" title="MX 记录"></a>MX 记录</h3><p>MX 记录就是邮件的解析记录，非常重要的一条记录，配置根域名的 MX 记录为自己的邮件域名地址，优先级为 10，检测方式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dig free.gd MX +noall +answer @8.8.8.8</span><br><span class="line">nslookup -type=mx free.gd 8.8.8.8</span><br></pre></td></tr></table></figure>
+
+<h3 id="SPF-记录"><a href="#SPF-记录" class="headerlink" title="SPF 记录"></a>SPF 记录</h3><p>SPF 记录是为了防止垃圾邮件而设定的，告知收件方，从设置的允许列表中发出的邮件都是合法的，设置方式为添加一条根域名的 TXT 解析记录，内容为 v&#x3D;spf1 mx ~all，检测方式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dig -t txt free.gd @8.8.8.8</span><br><span class="line">nslookup -type=txt free.gd 8.8.8.8</span><br></pre></td></tr></table></figure>
+
+<h3 id="DKIM-解析"><a href="#DKIM-解析" class="headerlink" title="DKIM 解析"></a>DKIM 解析</h3><p>DKIM 可说是避免被判定为垃圾邮件的一大利器，DKIM 属于一种类似加密签名的解析记录，只有包含此加密数据，且公钥与密钥相匹配才属于合法邮件，要设置 DKIM 记录，首先要查询 DKIM 信息，在系统中执行命令查看：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">amavisd showkeys</span><br></pre></td></tr></table></figure>
+
+<p>得到这样一组数据</p>
+<blockquote>
+<p>; key#1 2048 bits, i&#x3D;dkim, d&#x3D;free.gd, &#x2F;var&#x2F;lib&#x2F;dkim&#x2F;free.gd.pem<br>dkim._domainkey.free.gd. 3600 TXT ( “v&#x3D;DKIM1; p&#x3D;”<br>“MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAviCll3+5qwbprg4QdQPe”<br>“vjYzUm6w8s7hM875GNfUlDmTmDzr53yCZ645&#x2F;DZZKGssWZ8Dx1HLhzyUz&#x2F;QSIYG0”<br>“G987P3SReVutztxWoau1pmdgJ4FxWHdrChsB6Nwlu6hJqAQFe4dxoQ4r0z9SH0mT”<br>“i6LnlL+Efzlt1vF6VHfTlRxkxgOXfXyOCg4ZaDjL5&#x2F;+&#x2F;WXSgYWoW53iV8TzWlaPu”<br>“KQ+7LJ0w8AM0iBYN1px3fX2fxIAi7Ogakv1L2EMAwQZ&#x2F;YOxN9tjUKFFOUpJHtXR9”<br>“LVHn46E3QCYH7T2dub3isjndUu4DirX0boG8u1WV8ipXVc1yl6q9M94I0HROOb+U”<br>“2QIDAQAB”)</p>
+</blockquote>
+<p>将括号内的文本去除引号与空格并相连就是咱们的 DKIM 数据，在解析中添加一条 dkim._domainkey 的 TXT 解析，内容就是咱们组合出的文本传，测试方式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dig -t txt dkim._domainkey.free.gd @8.8.8.8</span><br><span class="line">nslookup -type=txt dkim._domainkey.free.gd 8.8.8.8</span><br></pre></td></tr></table></figure>
+
+<h3 id="DMARC-记录"><a href="#DMARC-记录" class="headerlink" title="DMARC 记录"></a>DMARC 记录</h3><p>DMARC 记录是当收件方检测到伪造邮件等行为时，将根据您的配置进行操作的一个记录，比如拒绝邮件或放入垃圾邮件以及不做处理等，同时会反馈一份检测报告到配置的邮箱地址内，添加方法就是增加一条 _dmarc 的 TXT 解析，内容为配置选项，比如 v&#x3D;DMARC1; p&#x3D;none; rua&#x3D;mailto:<a href="mailto:&#x64;&#109;&#97;&#x72;&#x63;&#x40;&#102;&#x72;&#x65;&#101;&#46;&#103;&#100;">&#x64;&#109;&#97;&#x72;&#x63;&#x40;&#102;&#x72;&#x65;&#101;&#46;&#103;&#100;</a>，检测方式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dig -t txt _dmarc.free.gd @8.8.8.8</span><br><span class="line">nslookup -type=txt _dmarc.free.gd 8.8.8.8</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置证书"><a href="#配置证书" class="headerlink" title="配置证书"></a>配置证书</h2><p>为了更好的体验，避免在使用网页版或客户端时出现不受信任证书的情况，咱们需要使用自己的可受信任的证书，Let’s Encrypt 证书就是非常不错的可受信任免费证书。</p>
+<p>证书的申请不再说明，使用 acme.sh 以 DNS 方式验证即可，证书申请后执行命令完成证书替换：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --installcert -d mail.free.gd --key-file /etc/ssl/private/iRedMail.key --fullchain-file /etc/ssl/certs/iRedMail.crt --reloadcmd &quot;service postfix reload;service dovecot reload;service nginx reload&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="邮件测试"><a href="#邮件测试" class="headerlink" title="邮件测试"></a>邮件测试</h2><p>当全部完成，且解析全部生效后，咱们应该进行一次测试，检查自己的邮件服务器是否达到标准，避免被接收方转入垃圾邮件。</p>
+<p>打开 <a target="_blank" rel="noopener" href="http://www.mail-tester.com/">https://www.mail-tester.com</a> 网站，会得到一个邮箱地址，使用自己的邮件服务器随意发送一封邮件到此地址，并查看邮件得分即可。</p>
+<p>可以看到，这里测试了得到 10 分的满分，这样就可以保证邮件发送后不会进入对方的垃圾邮箱内，非常完美！</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2020-12-09T15:59:24.000Z" itemprop="datePublished">
+              2020-12-09
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/FreeBSD/">FreeBSD</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/iRedMail/">iRedMail</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8/">邮件服务器</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2024 - 康诺 </div>
+    <div>
+        <span>
+            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a target="_blank" rel="noopener" href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+
+<script src="/js/pager/dist/singlepager.js"></script>
+
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>

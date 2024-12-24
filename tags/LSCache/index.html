@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>康诺&#39;S 小屋</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(/assets/header.png)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>康诺&#39;S 小屋</div>
+        
+            <div>一个中年大叔的日常记录</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a target="_blank" rel="noopener" href="https://github.com/ylqjgm">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <ul class="Index">
+  
+    <header class='PageTitle'>
+        <h1>{ LSCache }</h1>
+    </header>
+  
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/43906b11ae3c/">使用OpenLiteSpeed创建WordPress并开启缓存</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2020-11-20T14:01:51.000Z" itemprop="datePublished">
+    2020-11-20
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/LSCache/">LSCache</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/OpenLiteSpeed/">OpenLiteSpeed</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/WordPress/">WordPress</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p>在上一篇文章中，康诺使用 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 开启了虚拟机，也就是俗称的VPS。</p>
+<p><a href="https://free.gd/hetzner-proxmox-ipv6-vps.html">Hetzner服务器内安装Proxmox并开通IPv6小鸡</a></p>
+<p>本篇，将会在开启出来的VPS中安装配置 <a target="_blank" rel="noopener" href="https://openlitespeed.org/">OpenLiteSpeed</a> 并创建一个 <a target="_blank" rel="noopener" href="https://wordpress.com/">WordPress</a> 博客程序，完成网站搭建。</p>
+<p>在搭建之前，随意介绍下今天的主角：OpenLiteSpeed</p>
+<blockquote>
+<p>OpenLiteSpeed 是 LiteSpeed EnterPrise 的社区版本，相较 Nginx 很多扩展如 Brotli、nginx-cache-purge 等扩展，会因为更新的不及时导致对最新Stable版本的不支持，同时也没有企业级的保障。 而 OpenLiteSpeed 的组件有官方进行主要维护和更新，提供商用企业级的体验。</p>
+</blockquote>
+<blockquote>
+<p>在性能上，LiteSpeed Tech 提供的 BenchMark 中，在 WordPress、Joomla、OpenCart、ModSecurity、小型静态文件、HTTP&#x2F;2、HTTP&#x2F;3 的测试上都比 Apache HTTPD 和 Nginx 有这更好的表现，这不仅仅是跑个 Hello World 而是进行一个完整的测试。</p>
+</blockquote>
+<p>总的来说，OpenLiteSpeed 就是一款比 <a target="_blank" rel="noopener" href="https://nginx.org/">Nginx</a>、<a target="_blank" rel="noopener" href="https://www.apache.org/">Apache</a> 等更优秀的商业开源版本的 Web 服务器软件，因为是商业公司开发，所以更新、修补及性能等有较好的保障，而且 OpenLiteSpeed 包含有一个插件 LSCache，这款插件是专门针对 WordPress 进行开发设计的，优化效果相较于其他缓存插件那是高了很多的。</p>
+<p>基于此，本文将会着重讲解 OpenLiteSpeed 的安装以及 LSCache 的使用。</p>
+        
+          <div class="more-link">
+            <a href="/43906b11ae3c/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+</ul>
+
+
+
+            <footer>
+    <div>© 2024 - 康诺 </div>
+    <div>
+        <span>
+            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a target="_blank" rel="noopener" href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+
+<script src="/js/pager/dist/singlepager.js"></script>
+
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>
