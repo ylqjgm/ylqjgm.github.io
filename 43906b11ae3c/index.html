@@ -87,7 +87,7 @@
 <h2 id="官方一键包"><a href="#官方一键包" class="headerlink" title="官方一键包"></a>官方一键包</h2><p>直接输入命令进行安装配置：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate https://github.com/litespeedtech/ols1clk/raw/master/ols1clk.sh</span><br><span class="line">bash ols1clk.sh --adminpassword free.gd --email admin@free.gd --lsphp 81 --listenport 80 --ssllistenport 443</span><br></pre></td></tr></table></figure>
 
-<p>执行后，将会自动为您安装 OpenLiteSpeed，并配置管理员密码为 free.gd，管理员邮箱为 <a href="mailto:&#x61;&#x64;&#x6d;&#105;&#x6e;&#64;&#x66;&#114;&#x65;&#101;&#x2e;&#x67;&#100;">&#x61;&#x64;&#x6d;&#105;&#x6e;&#64;&#x66;&#114;&#x65;&#101;&#x2e;&#x67;&#100;</a>，以及安装 lsphp81，监听 80 及 443 两个 Web 端口，由于康诺在服务器上单独开设了一台小鸡作为 MySQL 数据库服务器，所以这里没有安装 MySQL，需要安装的可以看看下方的完整命令列表：</p>
+<p>执行后，将会自动为您安装 OpenLiteSpeed，并配置管理员密码为 free.gd，管理员邮箱为 <a href="mailto:&#97;&#x64;&#109;&#x69;&#110;&#64;&#x66;&#114;&#101;&#101;&#46;&#103;&#x64;">&#97;&#x64;&#109;&#x69;&#110;&#64;&#x66;&#114;&#101;&#101;&#46;&#103;&#x64;</a>，以及安装 lsphp81，监听 80 及 443 两个 Web 端口，由于康诺在服务器上单独开设了一台小鸡作为 MySQL 数据库服务器，所以这里没有安装 MySQL，需要安装的可以看看下方的完整命令列表：</p>
 <blockquote>
 <p>–adminpassword [PASSWORD] To set the WebAdmin password for OpenLiteSpeed instead of using a random one.<br>–email [EMAIL] To set the administrator email.<br>–lsphp [VERSION] To set the LSPHP version, such as 80. We currently support versions ‘71 72 73 74 80 81’.<br>–mariadbver [VERSION] To set MariaDB version, such as 10.9. We currently support versions ‘10.2 10.3 …10.9’.<br>–wordpress To install WordPress. You will still need to complete the WordPress setup by browser<br>–wordpressplus [SITEDOMAIN] To install, set up, and configure WordPress, also LSCache will be enabled<br>–wordpresspath [WP_PATH] To specify a location for the new WordPress installation or use for an existing WordPress.<br>–dbrootpassword [PASSWORD] To set the database root password instead of using a random one.<br>–dbname [DATABASENAME] To set the database name to be used by WordPress.<br>–dbuser [DBUSERNAME] To set the WordPress username in the database.<br>–dbpassword [PASSWORD] To set the WordPress table password in MySQL instead of using a random one.<br>–prefix [PREFIXNAME] To set the WordPress table prefix.<br>–listenport [PORT] To set the HTTP server listener port, default is 80.<br>–ssllistenport [PORT] To set the HTTPS server listener port, default is 443.<br>–wpuser [WP_USER] To set the WordPress admin user for WordPress dashboard login. Default value is wpuser.<br>–wppassword [PASSWORD] To set the WordPress admin user password for WordPress dashboard login.<br>–wplang [WP_LANGUAGE] To set the WordPress language. Default value is “en_US” for English.<br>–sitetitle [WP_TITLE] To set the WordPress site title. Default value is mySite.<br>–pure-mariadb To install OpenLiteSpeed and MariaDB.<br>–with-mysql To install OpenLiteSpeed&#x2F;App with MySQL.<br>–proxy-r To set a proxy with rewrite type.<br>–proxy-c To set a proxy with config type.<br>–uninstall To uninstall OpenLiteSpeed and remove installation directory.<br>–purgeall To uninstall OpenLiteSpeed, remove installation directory, and purge all data in MySQL.<br>–quiet To use quiet mode, won’t prompt to input anything.<br>–version To display the script version information.<br>–verbose To display more messages during the installation.<br>–update To update ols1clk from github.<br>–help To display help messages.</p>
 </blockquote>
@@ -106,24 +106,24 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/lsws/bin/lswsctrl restart</span><br></pre></td></tr></table></figure>
 
 <p>再次打开控制面板，并输入帐号名称 admin 及自己配置或程序随机生成的密码登录控制面板。</p>
-<p><img src="https://img.free.gd/202011/01.4n7s37h0w4.webp" alt="01.webp"></p>
+<p><img src="https://cdn.free.gd/images/2024/12/d198a8711b0549954732b5417cf8e946-92cfae26.webp" alt="01">![01]</p>
 <p>登录后，在控制面板右上角可以修改语言为中文。</p>
-<p><img src="https://img.free.gd/202011/02.6t76oz8on8.webp" alt="02.webp"></p>
+<p><img src="https://cdn.free.gd/images/2024/12/549cf1cd6fee3ef2887755c41faa588c-0bc14cca.webp" alt="02"></p>
 <p>点击左侧的 虚拟主机，并点击 “+” 添加一个虚拟主机并填写网站基本信息。</p>
-<p><img src="https://img.free.gd/202011/03.1e8o6jtj9h.webp" alt="03.webp"></p>
+<p><img src="https://cdn.free.gd/images/2024/12/a97173cae35b7640a9cf891867ca0929-7cd54c41.webp" alt="03"></p>
 <p>点击保存图标保存，会出现 file &#x2F;usr&#x2F;local&#x2F;lsws&#x2F;conf&#x2F;vhosts&#x2F;free.gd&#x2F;vhconf.conf does not exist. CLICK TO CREATE 这样的一段提示，咱们点击 CLICK TO CREATE 创建配置文件后再次提交即可，接着按照提示一步一步的完成即可。</p>
 <p>配置完成后发现依然无法打开网站，这是因为还没有将网站添加到监听的端口中。</p>
 <p>点击左侧 监听器，可以看到后台已经默认配置了两个监听接口，一个是 HTTP 的 80 端口，一个是 HTTPS 的 443 端口。</p>
 <p>接下来，依次点击 放大镜，并点击 “+” 将自己刚才创建的虚拟主机加入到接口中，记住两个端口都要添加！</p>
-<p><img src="https://img.free.gd/202011/04.6bh50e7b2d.webp" alt="04.webp"></p>
+<p><img src="https://cdn.free.gd/images/2024/12/1af6c20e7f40e98fbd8dfe2588baec8e-ab9e7134.webp" alt="04"></p>
 <p>此时，咱们网站也创建完成了，到 MySQL 服务器中创建一个数据库及专属用户，接着在网站服务器中执行命令：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /srv/www/free.gd</span><br><span class="line">cd /srv/www/free.gd</span><br><span class="line">fetch https://WordPress.org/latest.tar.gz</span><br><span class="line">tar zxf latest.tar.gz</span><br><span class="line">rm -f latest.tar.gz</span><br><span class="line">mv WordPress public_html</span><br><span class="line">chown -R nobody:nogroup /srv/www/free.d</span><br><span class="line">chmod -R 755 /srv/www/free.gd</span><br><span class="line">/usr/local/lsws/bin/lswsctrl restart</span><br></pre></td></tr></table></figure>
 
 <p>访问域名开始安装 WordPress。</p>
 <h2 id="LSCache配置"><a href="#LSCache配置" class="headerlink" title="LSCache配置"></a>LSCache配置</h2><p>在 WordPress 后台安装插件 LiteSpeed Cache 并激活，根据自己的需要进行自定义配置，这里最主要记得开启 对象缓存 与 即时点击，其余自行决定。</p>
-<p><img src="https://img.free.gd/202011/05.8hgjm5yyth.webp" alt="05.webp"></p>
-<p><img src="https://img.free.gd/202011/06.70aekeuu2u.webp" alt="06.webp"></p>
-<p><img src="https://img.free.gd/202011/07.1zibsunzk6.webp" alt="07.webp"></p>
+<p><img src="https://cdn.free.gd/images/2024/12/006f9b5133b4c75cb90f196114680ba4-0aa2f72e.webp" alt="05"></p>
+<p><img src="https://cdn.free.gd/images/2024/12/995b683e75cab77913eeeda531af1325-70a6aabe.webp" alt="06"></p>
+<p><img src="https://cdn.free.gd/images/2024/12/806d9f6e72f2c5421075206b2eea0cca-265b1e37.webp" alt="07"></p>
 <p>完成以上步骤后，已经基本OK，不过，为了更好的缓存效果，咱们回到 OpenLiteSpeed 控制面板，进入刚才添加的虚拟主机中，在 资源集 下依次添加几条静态规则。</p>
 <p><strong>第一条</strong></p>
 <blockquote>
@@ -138,7 +138,7 @@
 <p>URI: exp:^.*(gif|ico|jpeg|jpg|png|webp|woff|woff2|fon|fot|ttf)位置:DOC_ROOT&#x2F;$0<br>可访问: yes<br>启用过期: yes<br>按类型过期: text&#x2F;css&#x3D;A15552000, image&#x2F;gif&#x3D;A15552000, image&#x2F;x-icon&#x3D;A15552000, image&#x2F;jpeg&#x3D;A15552000, application&#x2F;x-javascript&#x3D;A15552000, text&#x2F;javascript&#x3D;A15552000, application&#x2F;javascript&#x3D;A15552000, image&#x2F;png&#x3D;A15552000, image&#x2F;webp&#x3D;A15552000, font&#x2F;ttf&#x3D;A15552000, font&#x2F;woff&#x3D;A15552000, font&#x2F;woff2&#x3D;A15552000, application&#x2F;x-font-ttf&#x3D;A15552000, application&#x2F;x-font-woff&#x3D;A15552000, application&#x2F;font-woff&#x3D;A15552000, application&#x2F;font-woff2&#x3D;A15552000<br>头部操作:<br>unset Cache-control<br>set Cache-control public, max-age&#x3D;15552000<br>set Access-Control-Allow-Origin: *</p>
 </blockquote>
 <p>完成后效果如图</p>
-<p><img src="https://img.free.gd/202011/08.1sf3xf1u4m.webp" alt="08.webp"></p>
+<p><img src="https://cdn.free.gd/images/2024/12/702b45edebce1113fd331d5756cd832f-70effc84.webp" alt="08"></p>
 <p>完成后再次重启即可</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/lsws/bin/lswsctrl restart</span><br></pre></td></tr></table></figure>
 
