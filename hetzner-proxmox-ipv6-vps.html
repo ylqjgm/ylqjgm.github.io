@@ -1,75 +1,16 @@
-<!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Hetzner服务器内安装Proxmox并开通IPv6小鸡 | 康诺&#39;S 小屋</title>
-  
-  
-  
-  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
-  
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+<!DOCTYPE html><html class="appearance-auto" lang="zh-CN"><head><meta charset="UTF-8"><title>Hetzner服务器内安装Proxmox并开通IPv6小鸡</title><meta name="description" content="一个中年大叔"><meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1"><!-- Google Analytics --><!-- End Google Analytics -->
+<!-- Baidu Analytics --><!-- End Baidu Analytics --><link rel="icon" href="https://cdn.free.gd/assets/img/avatar.26ljofvr7k.avif"><link rel="stylesheet" href="/style/common/bulma.css"><link rel="stylesheet" href="/style/base.css"><link rel="stylesheet" href="/style/common/helper.css"><script src="/js/common.js"></script><link rel="stylesheet" href="/style/post.css"><link rel="stylesheet" href="/style/common/jquery.fancybox.min.css"><script src="//unpkg.com/prismjs@1.29.0/components/prism-core.min.js"></script><script src="/js/prismjs.js"></script><meta name="description" content="导读内容已失效，因 Hetzner 原因，容易造成 MAC 警告导致封号
+Hetzner 是一家提供廉价服务器的德国供应商，独立服务器价格低廉，性价比高，受到很多网友的喜爱。
+本站也是建立在 Hetzner 中，使用 Proxmox 进行 VPS 管理，再搭配 Cloudflare 进行 CDN 加速。
+本文主要介绍如何在 Hetzner 中构建 Proxmox，并进行 VPS 开设，图文内容较多，请耐心阅读。
 
-  
-<link rel="stylesheet" href="/css/style.css">
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+系统安装在购买并开通了 Hetzner 后，我们将得到一个管理帐号及密码，然后登录管理系统 Robot，登录后可查看自己的服务器信息。
+点击 Rescue 进入恢复模式配置界面进行配置，并记下配置后给的 SSH 密码
 
-<body>
-<div class="Shell">
-    <aside class='SideBar'>
-    <section class='avatar' style="background-image: url(https://cdn.free.gd/assets/img/header.7sna2ax20w.avif)">
-        <div class='av-pic' style="background-image: url(https://cdn.free.gd/assets/img/avatar.26ljofvr7k.avif)">
-        </div>
-    </section>
-    <section class='menu'>
-        <div>康诺&#39;S 小屋</div>
-        
-            <div>一个中年大叔的日常记录</div>
-        
-        <ul>
-          
-            <a href="/" class="Btn">
-              <li>首页</li>
-            </a>  
-          
-            <a href="/archives/" class="Btn">
-              <li>归档</li>
-            </a>  
-          
-            <a href="/tags/" class="Btn">
-              <li>标签</li>
-            </a>  
-          
-            <a href="/categories/" class="Btn">
-              <li>分类</li>
-            </a>  
-          
-        </ul>
-    </section>
-    <section class="media">
-        
-            
-                <a target="_blank" rel="noopener" href="https://github.com/ylqjgm">
-                    <img src="/assets/github.svg" />
-                </a>
-            
-        
-    </section>
-</aside>
 
-    <div class="container">
-        <div data-pager-shell>
-            <div>
-  <article class='ContentView'>
-    <header class='PageTitle'>
-        <h1>Hetzner服务器内安装Proxmox并开通IPv6小鸡</h1>
-    </header>
-
-    <section>
-      <h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p><del><strong>内容已失效，因 Hetzner 原因，容易造成 MAC 警告导致封号</strong></del></p>
+完成后以此点击 Reset —— Execute an automatic.."><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="康诺'S 小屋" type="application/atom+xml">
+</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">康诺's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"><div class="is-full-height" id="postTopic"><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">Hetzner服务器内安装Proxmox并开通IPv6小鸡</p><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">点击返回顶部</p></div></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">主页</a></h3><h3 class="is-inline-block"><a href="/categories">分类</a></h3><h3 class="is-inline-block"><a href="/tags">标签</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">主页</a></h3><h3 class="is-inline-block"><a href="/categories">分类</a></h3><h3 class="is-inline-block"><a href="/tags">标签</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><main class="container is-max-widescreen content section post-page pt-4 px-4"><div class="columns is-flex-desktop is-justify-content-center is-flex-direction-row-reverse"><div class="column is-3 is-hidden-mobile"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85"><span class="toc-text">系统安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Proxmox%E5%AE%89%E8%A3%85"><span class="toc-text">Proxmox安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hetzner-Online-GmbH-installimage-source-etc-network-interfaces-d-auto-lo-iface-lo-inet-loopback-iface-lo"><span class="toc-text">Hetzner Online GmbH installimage source &#x2F;etc&#x2F;network&#x2F;interfaces.d&#x2F;* auto lo iface lo inet loopback iface lo</span></a></li></ol></li></ol></div><div class="column is-9"><header class="my-4"><a href="/tags/Hetzner"><i class="tag post-item-tag">Hetzner</i></a><a href="/tags/IPv6"><i class="tag post-item-tag">IPv6</i></a><a href="/tags/Proxmox"><i class="tag post-item-tag">Proxmox</i></a><a href="/tags/VPS"><i class="tag post-item-tag">VPS</i></a></header><h1 class="mt-0 mb-1 is-family-serif" id="postTitle">Hetzner服务器内安装Proxmox并开通IPv6小鸡</h1><time class="has-text-grey" datetime="2020-11-20T09:25:14.000Z">2020-11-20</time><article class="mt-2 post-content"><h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p><del><strong>内容已失效，因 Hetzner 原因，容易造成 MAC 警告导致封号</strong></del></p>
 <p><a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 是一家提供廉价服务器的德国供应商，独立服务器价格低廉，性价比高，受到很多网友的喜爱。</p>
 <p>本站也是建立在 <a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 中，使用 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 进行 VPS 管理，再搭配 <a target="_blank" rel="noopener" href="https://www.cloudflare.com/">Cloudflare</a> 进行 <strong>CDN</strong> 加速。</p>
 <p>本文主要介绍如何在 <a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 中构建 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a>，并进行 <strong>VPS</strong> 开设，图文内容较多，请耐心阅读。</p>
@@ -95,27 +36,31 @@
 <p>安装完成后键入 <strong>reboot</strong> 重启系统，重启完成后重新登录就是已安装完成的 <a target="_blank" rel="noopener" href="https://www.debian.org/">Debian</a> 系统。</p>
 <h2 id="Proxmox安装"><a href="#Proxmox安装" class="headerlink" title="Proxmox安装"></a>Proxmox安装</h2><p><a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 是使用 <a target="_blank" rel="noopener" href="https://www.debian.org/">Debian</a> 作为基础系统进行开发的，我们刚才已经把 <a target="_blank" rel="noopener" href="https://www.debian.org/">Debian</a> 安装到了服务器中，接着就在 Debian 上构建 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 即可。</p>
 <p>在安装之前，我们要确认自己的主机名是否配置正确，键入命令后若看到自己的 <strong>IP</strong> 地址，就证明自己主机名是正确的</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname --ip-address</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">hostname</span> --ip-address<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>添加 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 源</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;deb http://download.proxmox.com/debian/pve buster pve-no-subscription&quot; &gt; /etc/apt/sources.list.d/pve-install-repo.list</span><br><span class="line">wget http://download.proxmox.com/debian/proxmox-ve-release-6.x.gpg -O /etc/apt/trusted.gpg.d/proxmox-ve-release-6.x.gpg</span><br><span class="line">chmod +r /etc/apt/trusted.gpg.d/proxmox-ve-release-6.x.gpg</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"deb http://download.proxmox.com/debian/pve buster pve-no-subscription"</span> <span class="token operator">></span> /etc/apt/sources.list.d/pve-install-repo.list
+<span class="token function">wget</span> http://download.proxmox.com/debian/proxmox-ve-release-6.x.gpg <span class="token parameter variable">-O</span> /etc/apt/trusted.gpg.d/proxmox-ve-release-6.x.gpg
+<span class="token function">chmod</span> +r /etc/apt/trusted.gpg.d/proxmox-ve-release-6.x.gpg<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>更新系统</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt update &amp;&amp; apt full-upgrade</span><br><span class="line">aptitude -q -y purge firmware-bnx2x firmware-realtek firmware-linux firmware-linux-free firmware-linux-nonfree</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt</span> update <span class="token operator">&amp;&amp;</span> <span class="token function">apt</span> full-upgrade
+<span class="token function">aptitude</span> <span class="token parameter variable">-q</span> <span class="token parameter variable">-y</span> purge firmware-bnx2x firmware-realtek firmware-linux firmware-linux-free firmware-linux-nonfree<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>安装 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install proxmox-ve postfix open-iscsi</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt</span> <span class="token function">install</span> proxmox-ve postfix open-iscsi<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>官方推荐删除 <strong>os-prober</strong></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt remove os-prober</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt</span> remove os-prober<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>完成后重启并删除 [Debian][9] 内核，更新引导</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt remove linux-image-amd64 &#x27;linux-image-4.19*&#x27;</span><br><span class="line">update-grub</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt</span> remove linux-image-amd64 <span class="token string">'linux-image-4.19*'</span>
+<span class="token function">update-grub</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p><a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 配置</p>
 <p>我们完成了 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 的安装后，需要对 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 进行配置，配置的主要内容在于网络配置，这是由于 <a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 网络的特殊性所致，由于 <a target="_blank" rel="noopener" href="https://www.hetzner.com/">Hetzner</a> 所用网络是将 <strong>IP</strong> 与 <strong>MAC</strong> 地址进行绑定，所以在配置时与其他服务器稍显不同，这里一定要注意。</p>
 <p>打开网络配置文件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/network/interfaces</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nano</span> /etc/network/interfaces<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>对网络进行配置</p>
 <blockquote>
@@ -145,71 +90,4 @@
 <p>此时，咱们可以通过 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 创建 <strong>VPS</strong> 了，登录 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 管理界面地址：<strong><a target="_blank" rel="noopener" href="https://your-ip:8006/">https://your-ip:8006</a></strong></p>
 <p>在右上角 <strong>创建虚拟机</strong> 与 <strong>创建CT</strong> 两个按钮，其中虚拟机是 <strong>KVM</strong> 类型，<strong>CT</strong> 则是 <strong>LXC</strong> 类型，简单说就是 <strong>CT</strong> 仅支持 <strong>Linux</strong>，可通过模板快速创建，<strong>KVM</strong> 需要通过 <strong>ISO</strong> 进行安装</p>
 <p>咱们创建一个 <strong>LXC</strong> 小鸡，一路配置到网络这里，首先选择 <strong>vmbr0</strong> 网卡进行 <strong>IPv6</strong> 配置，直接配置为静态 <strong>IP</strong>，且使用 <a target="_blank" rel="noopener" href="https://proxmox.com/">Proxmox</a> 的主 <strong>IPv6</strong> 作为网关地址，创建完成后，再添加一个网卡 <strong>vmbr1</strong>，并填入内网地址，此时，<strong>VPS</strong> 已经开通完成，若配置没有问题，在 <strong>VPS</strong> 内可 <strong>PING</strong> 通外网，外网也可通过 <strong>IPv6</strong> 地址访问 <strong>VPS</strong>。</p>
-
-
-      
-
-    </section>
-    
-      <section class='ArticleMeta'>
-          <div>
-            发布于&nbsp;
-            <time datetime="2020-11-20T09:25:14.000Z" itemprop="datePublished">
-              2020-11-20
-            </time>
-          </div>
-          
-            <div>
-              tags: 
-  <li class="meta-text">
-  { <a href="/tags/Hetzner/">Hetzner</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/IPv6/">IPv6</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Proxmox/">Proxmox</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/VPS/">VPS</a> }
-  </li>
-
-
-            </div>
-          
-      </section>
-    
-    
-</article>
-
-  
-</div>
-
-            <footer>
-    <div>© 2024 - 康诺 </div>
-    <div>
-        <span>
-            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>
-        </span>
-        ,
-        <span>
-            Theme - <a target="_blank" rel="noopener" href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
-        </span>
-    </div>
-</footer>
-
-        </div>
-    </div>
-</div>
-
-<script src="/js/pager/dist/singlepager.js"></script>
-
-<script>
-var sp = new Pager('data-pager-shell')
-
-</script>
-</body>
-</html>
+</article><section class="jump-container is-flex is-justify-content-space-between my-6"><!-- em is empty placeholder--><a class="button is-default" href="/43906b11ae3c/" title="使用OpenLiteSpeed创建WordPress并开启缓存"><i class="iconfont icon-prev mr-2 has-text-grey"></i><span class="has-text-weight-semibold">上一页: 使用OpenLiteSpeed创建WordPress并开启缓存</span></a></section><article class="mt-6 comment-container"><script async repo="coolbie/Comments" src="https://utteranc.es/client.js" issue-term="pathname" theme="preferred-color-scheme"></script></article></div></div></main></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/ylqjgm"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 康诺 2024</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script src="/js/jquery-3.6.1.min.js"></script><script src="/js/jquery-fancybox.min.js"></script><script src="/js/img_zoom.js"></script><script src="/js/post.js"></script></body></html>

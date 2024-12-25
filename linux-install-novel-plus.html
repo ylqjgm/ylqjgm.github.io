@@ -1,176 +1,75 @@
-<!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Linux下安装小说精品屋Plus | 康诺&#39;S 小屋</title>
-  
-  
-  
-  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
-  
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+<!DOCTYPE html><html class="appearance-auto" lang="zh-CN"><head><meta charset="UTF-8"><title>Linux下安装小说精品屋Plus</title><meta name="description" content="一个中年大叔"><meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1"><!-- Google Analytics --><!-- End Google Analytics -->
+<!-- Baidu Analytics --><!-- End Baidu Analytics --><link rel="icon" href="https://cdn.free.gd/assets/img/avatar.26ljofvr7k.avif"><link rel="stylesheet" href="/style/common/bulma.css"><link rel="stylesheet" href="/style/base.css"><link rel="stylesheet" href="/style/common/helper.css"><script src="/js/common.js"></script><link rel="stylesheet" href="/style/post.css"><link rel="stylesheet" href="/style/common/jquery.fancybox.min.css"><script src="//unpkg.com/prismjs@1.29.0/components/prism-core.min.js"></script><script src="/js/prismjs.js"></script><meta name="description" content="导读小说精品屋Plus 是一款 Java 语言编写的在线小说阅读系统，具有极快的采集速度以及简便的搭建方式，本文将以 Ubuntu 为基础，对 小说精品屋Plus 进行搭建。
+演示地址：https://book.free.gd
 
-  
-<link rel="stylesheet" href="/css/style.css">
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+环境搭建本次选用的操作系统为 Ubuntu 20.04，系统安装完成后，需要安装 MySQL 以及 JDK8，MySQL 的安装不多重复，这里简单说下 JDK 的安装。
+网上很多人介绍 JDK 安装时都是直接在官网下载，但目前官网已经启用了登录下载模式，这样极不方便，本次安装选择使用 apt 安装，安装命令：
+apt install openjdk-8-jdk
 
-<body>
-<div class="Shell">
-    <aside class='SideBar'>
-    <section class='avatar' style="background-image: url(https://cdn.free.gd/assets/img/header.7sna2ax20w.avif)">
-        <div class='av-pic' style="background-image: url(https://cdn.free.gd/assets/img/avatar.26ljofvr7k.avif)">
-        </div>
-    </section>
-    <section class='menu'>
-        <div>康诺&#39;S 小屋</div>
-        
-            <div>一个中年大叔的日常记录</div>
-        
-        <ul>
-          
-            <a href="/" class="Btn">
-              <li>首页</li>
-            </a>  
-          
-            <a href="/archives/" class="Btn">
-              <li>归档</li>
-            </a>  
-          
-            <a href="/tags/" class="Btn">
-              <li>标签</li>
-            </a>  
-          
-            <a href="/categories/" class="Btn">
-              <li>分类</li>
-            </a>  
-          
-        </ul>
-    </section>
-    <section class="media">
-        
-            
-                <a target="_blank" rel="noopener" href="https://github.com/ylqjgm">
-                    <img src="/assets/github.svg" />
-                </a>
-            
-        
-    </section>
-</aside>
-
-    <div class="container">
-        <div data-pager-shell>
-            <div>
-  <article class='ContentView'>
-    <header class='PageTitle'>
-        <h1>Linux下安装小说精品屋Plus</h1>
-    </header>
-
-    <section>
-      <h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p><a target="_blank" rel="noopener" href="https://github.com/201206030/novel-plus">小说精品屋Plus</a> 是一款 Java 语言编写的在线小说阅读系统，具有极快的采集速度以及简便的搭建方式，本文将以 Ubuntu 为基础，对 小说精品屋Plus 进行搭建。</p>
+接着就是创建数据库以及用户：
+CREATE DATABASE book DEFAULT CHARACTER SET u.."><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="康诺'S 小屋" type="application/atom+xml">
+</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">康诺's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"><div class="is-full-height" id="postTopic"><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">Linux下安装小说精品屋Plus</p><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">点击返回顶部</p></div></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">主页</a></h3><h3 class="is-inline-block"><a href="/categories">分类</a></h3><h3 class="is-inline-block"><a href="/tags">标签</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">主页</a></h3><h3 class="is-inline-block"><a href="/categories">分类</a></h3><h3 class="is-inline-block"><a href="/tags">标签</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><main class="container is-max-widescreen content section post-page pt-4 px-4"><div class="columns is-flex-desktop is-justify-content-center is-flex-direction-row-reverse"><div class="column is-3 is-hidden-mobile"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E6%9B%B4%E6%94%B9"><span class="toc-text">程序更改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C"><span class="toc-text">程序运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%88%AC%E8%99%AB%E6%89%A7%E8%A1%8C"><span class="toc-text">爬虫执行</span></a></li></ol></div><div class="column is-9"><header class="my-4"><a href="/tags/%E5%B0%8F%E8%AF%B4"><i class="tag post-item-tag">小说</i></a><a href="/tags/Linux"><i class="tag post-item-tag">Linux</i></a></header><h1 class="mt-0 mb-1 is-family-serif" id="postTitle">Linux下安装小说精品屋Plus</h1><time class="has-text-grey" datetime="2020-12-05T09:40:52.000Z">2020-12-05</time><article class="mt-2 post-content"><h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p><a target="_blank" rel="noopener" href="https://github.com/201206030/novel-plus">小说精品屋Plus</a> 是一款 Java 语言编写的在线小说阅读系统，具有极快的采集速度以及简便的搭建方式，本文将以 Ubuntu 为基础，对 小说精品屋Plus 进行搭建。</p>
 <p>演示地址：<del><a target="_blank" rel="noopener" href="https://book.free.gd/">https://book.free.gd</a></del></p>
 <span id="more"></span>
 
 <h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>本次选用的操作系统为 Ubuntu 20.04，系统安装完成后，需要安装 MySQL 以及 JDK8，MySQL 的安装不多重复，这里简单说下 JDK 的安装。</p>
 <p>网上很多人介绍 JDK 安装时都是直接在官网下载，但目前官网已经启用了登录下载模式，这样极不方便，本次安装选择使用 apt 安装，安装命令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install openjdk-8-jdk</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt</span> <span class="token function">install</span> openjdk-8-jdk<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>接着就是创建数据库以及用户：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE book <span class="keyword">DEFAULT</span> <span class="keyword">CHARACTER SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_general_ci;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">ON</span> book.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;book&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;bookpasswd&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">DATABASE</span> book <span class="token keyword">DEFAULT</span> <span class="token keyword">CHARACTER</span> <span class="token keyword">SET</span> utf8mb4 <span class="token keyword">COLLATE</span> utf8mb4_general_ci<span class="token punctuation">;</span>
+<span class="token keyword">GRANT</span> <span class="token keyword">ALL</span> <span class="token keyword">ON</span> book<span class="token punctuation">.</span><span class="token operator">*</span> <span class="token keyword">TO</span> <span class="token string">'book'</span> IDENTIFIED <span class="token keyword">BY</span> <span class="token string">'bookpasswd'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>这样就创建了一个数据库 book，同时创建了一个用户 book，密码为 bookpasswd</p>
 <h2 id="程序更改"><a href="#程序更改" class="headerlink" title="程序更改"></a>程序更改</h2><p>将程序包下载到服务器并解压：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/201206030/novel-plus/releases/download/v3.0.2/novel-plus-install-v3.0.2.zip -O ~/novel.zip</span><br><span class="line">unzip novel.zip</span><br><span class="line">cd ~/novel-plus-install-v3.0.2</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://github.com/201206030/novel-plus/releases/download/v3.0.2/novel-plus-install-v3.0.2.zip <span class="token parameter variable">-O</span> ~/novel.zip
+<span class="token function">unzip</span> novel.zip
+<span class="token builtin class-name">cd</span> ~/novel-plus-install-v3.0.2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>解压后会出现四个目录，分别是：</p>
 <blockquote>
 <p>novel-admin：程序后台（个人觉得没什么用）<br>novel-crawl：爬虫程序<br>novel-front：程序前台<br>sql：数据库文件</p>
 </blockquote>
 <p>将 sql 文件导入数据库：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -ubook -pbookpasswd book &lt; sql/novel_plus.sql</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">mysql <span class="token parameter variable">-ubook</span> <span class="token parameter variable">-pbookpasswd</span> book <span class="token operator">&lt;</span> sql/novel_plus.sql<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>接着修改每个文件夹下的 .yml 文件，主要是修改数据库连接信息：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">jdbc:mysql://127.0.0.1:3306/novel_plus?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=Asia/Shanghai</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">jdbc<span class="token punctuation">:</span>mysql<span class="token punctuation">:</span>//127.0.0.1<span class="token punctuation">:</span>3306/novel_plus<span class="token punctuation">?</span>useUnicode=true<span class="token important">&amp;characterEncoding=utf8&amp;serverTimezone=Asia/Shanghai</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <blockquote>
 <p>username: root<br>password: root<br>127.0.0.1:3306 修改为自己的 MySQL 地址与端口<br>novel_plus 修改为自己的数据库名称<br>username 为数据库连接用户名<br>password 为数据库连接密码</p>
 </blockquote>
 <p>同时关注下各程序所运行的端口号：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#端口号</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="string">80xx</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment">#端口号</span>
+<span class="token key atrule">server</span><span class="token punctuation">:</span>
+  <span class="token key atrule">port</span><span class="token punctuation">:</span> 80xx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>前台文件夹的 yml 文件中，有一项可以修改图片的保存方式：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">pic:</span></span><br><span class="line">  <span class="attr">save:</span></span><br><span class="line">    <span class="comment">#图片保存方式, 1不保存，使用网络图片 ，2本地保存</span></span><br><span class="line">    <span class="attr">type:</span> <span class="number">2</span></span><br><span class="line">    <span class="comment">#图片保存路径</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">/var/pic</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">pic</span><span class="token punctuation">:</span>
+  <span class="token key atrule">save</span><span class="token punctuation">:</span>
+    <span class="token comment">#图片保存方式, 1不保存，使用网络图片 ，2本地保存</span>
+    <span class="token key atrule">type</span><span class="token punctuation">:</span> <span class="token number">2</span>
+    <span class="token comment">#图片保存路径</span>
+    <span class="token key atrule">path</span><span class="token punctuation">:</span> /var/pic<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>爬虫文件夹的 yml 文件中，有一项是修改爬虫系统管理员信息的：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#登录用户名密码</span></span><br><span class="line"><span class="attr">admin:</span></span><br><span class="line">  <span class="attr">username:</span> <span class="string">admin</span></span><br><span class="line">  <span class="attr">password:</span> <span class="string">admin</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment">#登录用户名密码</span>
+<span class="token key atrule">admin</span><span class="token punctuation">:</span>
+  <span class="token key atrule">username</span><span class="token punctuation">:</span> admin
+  <span class="token key atrule">password</span><span class="token punctuation">:</span> admin<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="程序运行"><a href="#程序运行" class="headerlink" title="程序运行"></a>程序运行</h2><p>当完成修改后，即可运行程序，所有程序都是分别运行，互不干扰却又互相依赖。</p>
 <p>需要全部运行则依次执行如下命令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd ~/novel-plus-install-v3.0.2/novel-front</span><br><span class="line">setsid java -jar novel-front-3.0.2.jar</span><br><span class="line">cd ~/novel-plus-install-v3.0.2/novel-crawl</span><br><span class="line">setsid java -jar novel-crawl-3.0.2.jar</span><br><span class="line">cd ~/novel-plus-install-v3.0.2/novel-admin</span><br><span class="line">setsid java -jar novel-admin-2.11.0.jar</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> ~/novel-plus-install-v3.0.2/novel-front
+setsid <span class="token function">java</span> <span class="token parameter variable">-jar</span> novel-front-3.0.2.jar
+<span class="token builtin class-name">cd</span> ~/novel-plus-install-v3.0.2/novel-crawl
+setsid <span class="token function">java</span> <span class="token parameter variable">-jar</span> novel-crawl-3.0.2.jar
+<span class="token builtin class-name">cd</span> ~/novel-plus-install-v3.0.2/novel-admin
+setsid <span class="token function">java</span> <span class="token parameter variable">-jar</span> novel-admin-2.11.0.jar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>接下来，根据 程序运行 文件中各程序的运行端口号，即可通过 <a href="http://ip:port/">http://ip:port/</a> 方式打开程序了！</p>
 <h2 id="爬虫执行"><a href="#爬虫执行" class="headerlink" title="爬虫执行"></a>爬虫执行</h2><p>爬虫程序需要通过网页来开启，若未修改，一般爬虫程序的运行端口为 8083，咱们用浏览器打开 <a href="http://ip:8083，可看到一个登录界面，输入爬虫配置文件中的用户名及密码即可登录。">http://ip:8083，可看到一个登录界面，输入爬虫配置文件中的用户名及密码即可登录。</a></p>
 <p>这里需要注意下，也不知道是本地网络问题还是什么，每次打开都必须要禁用缓存，否则不会出现源列表，若各位没有此问题，那直接启动采集即可。</p>
 <p>爬虫启动后，稍等片刻，即可看到小说飞快的涌入网站数据库中，真心的很快！</p>
-
-
-      
-
-    </section>
-    
-      <section class='ArticleMeta'>
-          <div>
-            发布于&nbsp;
-            <time datetime="2020-12-05T09:40:52.000Z" itemprop="datePublished">
-              2020-12-05
-            </time>
-          </div>
-          
-            <div>
-              tags: 
-  <li class="meta-text">
-  { <a href="/tags/%E5%B0%8F%E8%AF%B4/">小说</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Linux/">Linux</a> }
-  </li>
-
-
-            </div>
-          
-      </section>
-    
-    
-</article>
-
-  
-</div>
-
-            <footer>
-    <div>© 2024 - 康诺 </div>
-    <div>
-        <span>
-            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>
-        </span>
-        ,
-        <span>
-            Theme - <a target="_blank" rel="noopener" href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
-        </span>
-    </div>
-</footer>
-
-        </div>
-    </div>
-</div>
-
-<script src="/js/pager/dist/singlepager.js"></script>
-
-<script>
-var sp = new Pager('data-pager-shell')
-
-</script>
-</body>
-</html>
+</article><section class="jump-container is-flex is-justify-content-space-between my-6"><!-- em is empty placeholder--><a class="button is-default" href="/proxmox-freebsd-ipv6.html" title="Proxmox中FreeBSD虚拟机IPv6配置方式"><i class="iconfont icon-prev mr-2 has-text-grey"></i><span class="has-text-weight-semibold">上一页: Proxmox中FreeBSD虚拟机IPv6配置方式</span></a><a class="button is-default" href="/kvm-dd-windows.html" title="KVM下通过DD方式安装Windows"><span class="has-text-weight-semibold">下一页: KVM下通过DD方式安装Windows</span><i class="iconfont icon-next ml-2 has-text-grey"></i></a></section><article class="mt-6 comment-container"><script async repo="coolbie/Comments" src="https://utteranc.es/client.js" issue-term="pathname" theme="preferred-color-scheme"></script></article></div></div></main></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/ylqjgm"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 康诺 2024</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script src="/js/jquery-3.6.1.min.js"></script><script src="/js/jquery-fancybox.min.js"></script><script src="/js/img_zoom.js"></script><script src="/js/post.js"></script></body></html>

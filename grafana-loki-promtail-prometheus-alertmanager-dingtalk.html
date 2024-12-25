@@ -1,75 +1,33 @@
-<!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Grafana + Loki + Promtail + Prometheus + AlertManager 搭建附带钉钉通知的日志收集、主机监控系统 | 康诺&#39;S 小屋</title>
-  
-  
-  
-  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
-  
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+<!DOCTYPE html><html class="appearance-auto" lang="zh-CN"><head><meta charset="UTF-8"><title>Grafana + Loki + Promtail + Prometheus + AlertManager 搭建附带钉钉通知的日志收集、主机监控系统</title><meta name="description" content="一个中年大叔"><meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1"><!-- Google Analytics --><!-- End Google Analytics -->
+<!-- Baidu Analytics --><!-- End Baidu Analytics --><link rel="icon" href="https://cdn.free.gd/assets/img/avatar.26ljofvr7k.avif"><link rel="stylesheet" href="/style/common/bulma.css"><link rel="stylesheet" href="/style/base.css"><link rel="stylesheet" href="/style/common/helper.css"><script src="/js/common.js"></script><link rel="stylesheet" href="/style/post.css"><link rel="stylesheet" href="/style/common/jquery.fancybox.min.css"><script src="//unpkg.com/prismjs@1.29.0/components/prism-core.min.js"></script><script src="/js/prismjs.js"></script><meta name="description" content="导读目前学校在申请二级等保认证，这其中就有一项日志记录，而学校因为历史原因，所使用的业务很繁杂，系统也多样化，我来了后虽然改了一部分，但依然因为费用的原因，导致没有专门的日志系统，这也就导致在认证时采集日志的工作变得极为复杂。
+于是乎，为了解决这一问题，心里就在此浮现了搭建专用的日志采集系统的想法，正好之前有一台服务器被我改成了 Proxmox，部分小业务一直跑在上面，于是这次就在这台服务器上开个虚拟机，专门用来采集日志。
 
-  
-<link rel="stylesheet" href="/css/style.css">
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+环境介绍本次搭建环境如下：
 
-<body>
-<div class="Shell">
-    <aside class='SideBar'>
-    <section class='avatar' style="background-image: url(https://cdn.free.gd/assets/img/header.7sna2ax20w.avif)">
-        <div class='av-pic' style="background-image: url(https://cdn.free.gd/assets/img/avatar.26ljofvr7k.avif)">
-        </div>
-    </section>
-    <section class='menu'>
-        <div>康诺&#39;S 小屋</div>
-        
-            <div>一个中年大叔的日常记录</div>
-        
-        <ul>
-          
-            <a href="/" class="Btn">
-              <li>首页</li>
-            </a>  
-          
-            <a href="/archives/" class="Btn">
-              <li>归档</li>
-            </a>  
-          
-            <a href="/tags/" class="Btn">
-              <li>标签</li>
-            </a>  
-          
-            <a href="/categories/" class="Btn">
-              <li>分类</li>
-            </a>  
-          
-        </ul>
-    </section>
-    <section class="media">
-        
-            
-                <a target="_blank" rel="noopener" href="https://github.com/ylqjgm">
-                    <img src="/assets/github.svg" />
-                </a>
-            
-        
-    </section>
-</aside>
 
-    <div class="container">
-        <div data-pager-shell>
-            <div>
-  <article class='ContentView'>
-    <header class='PageTitle'>
-        <h1>Grafana + Loki + Promtail + Prometheus + AlertManager 搭建附带钉钉通知的日志收集、主机监控系统</h1>
-    </header>
 
-    <section>
-      <h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p>目前学校在申请二级等保认证，这其中就有一项日志记录，而学校因为历史原因，所使用的业务很繁杂，系统也多样化，我来了后虽然改了一部分，但依然因为费用的原因，导致没有专门的日志系统，这也就导致在认证时采集日志的工作变得极为复杂。</p>
+序号
+IP地址
+操作系统
+安装软件 ｜ 用途
+
+
+
+1
+192.168.10.1
+Alpine
+全套
+
+
+2
+192.168.10.2
+Ubuntu
+Promtail + Node Exporter
+
+
+主服务器搭建系统准备本着资源最小化的原则，直接.."><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="康诺'S 小屋" type="application/atom+xml">
+</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">康诺's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"><div class="is-full-height" id="postTopic"><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">Grafana + Loki + Promtail + Prometheus + AlertManager 搭建附带钉钉通知的..</p><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">点击返回顶部</p></div></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">主页</a></h3><h3 class="is-inline-block"><a href="/categories">分类</a></h3><h3 class="is-inline-block"><a href="/tags">标签</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">主页</a></h3><h3 class="is-inline-block"><a href="/categories">分类</a></h3><h3 class="is-inline-block"><a href="/tags">标签</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><main class="container is-max-widescreen content section post-page pt-4 px-4"><div class="columns is-flex-desktop is-justify-content-center is-flex-direction-row-reverse"><div class="column is-3 is-hidden-mobile"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="toc-text">环境介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA"><span class="toc-text">主服务器搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%87%86%E5%A4%87"><span class="toc-text">系统准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Grafana-%E6%90%AD%E5%BB%BA"><span class="toc-text">Grafana 搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Loki-%E6%90%AD%E5%BB%BA"><span class="toc-text">Loki 搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prometheus-%E6%90%AD%E5%BB%BA"><span class="toc-text">Prometheus 搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AlertManager-%E6%90%AD%E5%BB%BA"><span class="toc-text">AlertManager 搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%92%89%E9%92%89%E5%91%8A%E8%AD%A6%E6%90%AD%E5%BB%BA"><span class="toc-text">钉钉告警搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promtail-%E6%90%AD%E5%BB%BA"><span class="toc-text">Promtail 搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E5%90%84%E9%A1%B9%E6%9C%8D%E5%8A%A1"><span class="toc-text">启动各项服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%90%AD%E5%BB%BA"><span class="toc-text">客户端搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promtail-%E6%90%AD%E5%BB%BA-1"><span class="toc-text">Promtail 搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node-Exporter-%E6%90%AD%E5%BB%BA"><span class="toc-text">Node Exporter 搭建</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%A2%E6%9D%BF%E4%BD%BF%E7%94%A8"><span class="toc-text">面板使用</span></a></li></ol></div><div class="column is-9"><header class="my-4"><a href="/tags/%E6%97%A5%E5%BF%97"><i class="tag post-item-tag">日志</i></a><a href="/tags/Grafana"><i class="tag post-item-tag">Grafana</i></a><a href="/tags/Loki"><i class="tag post-item-tag">Loki</i></a><a href="/tags/Promtail"><i class="tag post-item-tag">Promtail</i></a><a href="/tags/Prometheus"><i class="tag post-item-tag">Prometheus</i></a><a href="/tags/AlertManager"><i class="tag post-item-tag">AlertManager</i></a></header><h1 class="mt-0 mb-1 is-family-serif" id="postTitle">Grafana + Loki + Promtail + Prometheus + AlertManager 搭建附带钉钉通知的日志收集、主机监控系统</h1><time class="has-text-grey" datetime="2024-12-18T16:09:03.000Z">2024-12-19</time><article class="mt-2 post-content"><h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p>目前学校在申请二级等保认证，这其中就有一项日志记录，而学校因为历史原因，所使用的业务很繁杂，系统也多样化，我来了后虽然改了一部分，但依然因为费用的原因，导致没有专门的日志系统，这也就导致在认证时采集日志的工作变得极为复杂。</p>
 <p>于是乎，为了解决这一问题，心里就在此浮现了搭建专用的日志采集系统的想法，正好之前有一台服务器被我改成了 <a target="_blank" rel="noopener" href="https://proxmox.com/en/">Proxmox</a>，部分小业务一直跑在上面，于是这次就在这台服务器上开个虚拟机，专门用来采集日志。</p>
 <span id="more"></span>
 
@@ -99,36 +57,767 @@
 <h2 id="主服务器搭建"><a href="#主服务器搭建" class="headerlink" title="主服务器搭建"></a>主服务器搭建</h2><h3 id="系统准备"><a href="#系统准备" class="headerlink" title="系统准备"></a>系统准备</h3><p>本着资源最小化的原则，直接采用了 <a target="_blank" rel="noopener" href="https://alpinelinux.org/">Alpine</a> 操作系统，只有几兆的大小，资源占用那叫一个小啊。</p>
 <p>同时，将几个软件整合在整个系统中，使用 <a target="_blank" rel="noopener" href="https://grafana.com/">Grafana</a> 作为面板查看各项数据，<a target="_blank" rel="noopener" href="https://github.com/grafana/loki">Loki</a> 作为日志收集系统，<a target="_blank" rel="noopener" href="https://prometheus.io/">Prometheus</a> 主机监控，<a target="_blank" rel="noopener" href="https://github.com/prometheus/alertmanager">AlertManager</a> 用于系统告警，<a target="_blank" rel="noopener" href="https://prometheus.io/">Prometheus</a> 的第三方钉钉插件用于对接钉钉报警。</p>
 <p>系统正常开启并更新后，执行命令安装必要组件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apk add curl wget libc6-compat</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">apk <span class="token function">add</span> <span class="token function">curl</span> <span class="token function">wget</span> libc6-compat<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>创建必要的数据存储目录：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /data/grafana</span><br><span class="line"><span class="built_in">mkdir</span> -p /data/loki/chunks</span><br><span class="line"><span class="built_in">mkdir</span> -p /data/loki/rules</span><br><span class="line"><span class="built_in">mkdir</span> -p /data/prometheus</span><br><span class="line"><span class="built_in">mkdir</span> -p /data/alertmanager</span><br><span class="line"><span class="built_in">mkdir</span> -p /data/dingtalk</span><br><span class="line"><span class="built_in">mkdir</span> -p /data/promtail</span><br><span class="line"><span class="built_in">mkdir</span> -p /opt/loki</span><br><span class="line"><span class="built_in">mkdir</span> -p /opt/promtail</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /data/grafana
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /data/loki/chunks
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /data/loki/rules
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /data/prometheus
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /data/alertmanager
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /data/dingtalk
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /data/promtail
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /opt/loki
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /opt/promtail<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>创建各服务所需的用户，这里不为 <a target="_blank" rel="noopener" href="https://github.com/grafana/loki">Promtail</a> 创建用户，是因为 <a target="_blank" rel="noopener" href="https://github.com/grafana/loki">Promtail</a> 在提交日志时，需要提交一些系统日志，使用独立用户会导致因权限问题无法提交：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">addgroup -S grafana</span><br><span class="line">addgroup -S loki</span><br><span class="line">addgroup -S prometheus</span><br><span class="line">addgroup -S alertmanager</span><br><span class="line">addgroup -S dingtalk</span><br><span class="line">adduser -S -D -H -G grafana grafana</span><br><span class="line">adduser -S -D -H -G loki loki</span><br><span class="line">adduser -S -D -H -G prometheus prometheus</span><br><span class="line">adduser -S -D -H -G alertmanager alertmanager</span><br><span class="line">adduser -S -D -H -G dingtalk dingtalk</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">addgroup <span class="token parameter variable">-S</span> grafana
+addgroup <span class="token parameter variable">-S</span> loki
+addgroup <span class="token parameter variable">-S</span> prometheus
+addgroup <span class="token parameter variable">-S</span> alertmanager
+addgroup <span class="token parameter variable">-S</span> dingtalk
+adduser <span class="token parameter variable">-S</span> <span class="token parameter variable">-D</span> <span class="token parameter variable">-H</span> <span class="token parameter variable">-G</span> grafana grafana
+adduser <span class="token parameter variable">-S</span> <span class="token parameter variable">-D</span> <span class="token parameter variable">-H</span> <span class="token parameter variable">-G</span> loki loki
+adduser <span class="token parameter variable">-S</span> <span class="token parameter variable">-D</span> <span class="token parameter variable">-H</span> <span class="token parameter variable">-G</span> prometheus prometheus
+adduser <span class="token parameter variable">-S</span> <span class="token parameter variable">-D</span> <span class="token parameter variable">-H</span> <span class="token parameter variable">-G</span> alertmanager alertmanager
+adduser <span class="token parameter variable">-S</span> <span class="token parameter variable">-D</span> <span class="token parameter variable">-H</span> <span class="token parameter variable">-G</span> dingtalk dingtalk<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>下载所需各项软件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /tmp</span><br><span class="line">wget -c https://dl.grafana.com/enterprise/release/grafana-enterprise-11.4.0.linux-amd64.tar.gz</span><br><span class="line">wget -c https://github.com/grafana/loki/releases/download/v3.3.1/loki-linux-amd64.zip</span><br><span class="line">wget -c https://github.com/grafana/loki/releases/download/v3.3.1/promtail-linux-amd64.zip</span><br><span class="line">wget -c https://github.com/prometheus/prometheus/releases/download/v2.53.3/prometheus-2.53.3.linux-amd64.tar.gz</span><br><span class="line">wget -c https://github.com/prometheus/alertmanager/releases/download/v0.27.0/alertmanager-0.27.0.linux-amd64.tar.gz</span><br><span class="line">wget -c https://github.com/timonwong/prometheus-webhook-dingtalk/releases/download/v2.1.0/prometheus-webhook-dingtalk-2.1.0.linux-amd64.tar.gz</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /tmp
+<span class="token function">wget</span> <span class="token parameter variable">-c</span> https://dl.grafana.com/enterprise/release/grafana-enterprise-11.4.0.linux-amd64.tar.gz
+<span class="token function">wget</span> <span class="token parameter variable">-c</span> https://github.com/grafana/loki/releases/download/v3.3.1/loki-linux-amd64.zip
+<span class="token function">wget</span> <span class="token parameter variable">-c</span> https://github.com/grafana/loki/releases/download/v3.3.1/promtail-linux-amd64.zip
+<span class="token function">wget</span> <span class="token parameter variable">-c</span> https://github.com/prometheus/prometheus/releases/download/v2.53.3/prometheus-2.53.3.linux-amd64.tar.gz
+<span class="token function">wget</span> <span class="token parameter variable">-c</span> https://github.com/prometheus/alertmanager/releases/download/v0.27.0/alertmanager-0.27.0.linux-amd64.tar.gz
+<span class="token function">wget</span> <span class="token parameter variable">-c</span> https://github.com/timonwong/prometheus-webhook-dingtalk/releases/download/v2.1.0/prometheus-webhook-dingtalk-2.1.0.linux-amd64.tar.gz<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="Grafana-搭建"><a href="#Grafana-搭建" class="headerlink" title="Grafana 搭建"></a>Grafana 搭建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">tar zxf grafana-enterprise-11.4.0.linux-amd64.tar.gz</span><br><span class="line"><span class="built_in">mv</span> grafana-v11.4.0 /opt/grafana</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /opt/grafana/conf/config.ini &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">[paths]</span></span><br><span class="line"><span class="string">data = /data/grafana/data</span></span><br><span class="line"><span class="string">logs = /data/grafana/log</span></span><br><span class="line"><span class="string">plugins = /opt/grafana/plugins</span></span><br><span class="line"><span class="string">provisioning = /opt/grafana/conf/provisioning</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/init.d/grafana &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">#!/sbin/openrc-run</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">name=&quot;grafana&quot;</span></span><br><span class="line"><span class="string">description=&quot;Grafana Server&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">command=&quot;/opt/grafana/bin/grafana server -- --config /opt/grafana/conf/config.ini&quot;</span></span><br><span class="line"><span class="string">pidfile=/data/grafana/run.pid</span></span><br><span class="line"><span class="string">logfile=/data/grafana/$name.log</span></span><br><span class="line"><span class="string">workdir=/opt/grafana</span></span><br><span class="line"><span class="string">user=grafana</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">depend() &#123;</span></span><br><span class="line"><span class="string">  need net localmount</span></span><br><span class="line"><span class="string">  after firewall</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">start_pre() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Preparing to start $name&quot;</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">start() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Starting $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --start --quiet --background --name grafana --make-pidfile --pidfile $pidfile --stdout $logfile --chdir $workdir --user $user --exec $command</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">stop() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Stopping $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --stop --quiet --pidfile $pidfile</span></span><br><span class="line"><span class="string">  if [ -e $pidfile ]</span></span><br><span class="line"><span class="string">    then rm $pidfile</span></span><br><span class="line"><span class="string">  fi</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">restart() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Restarting $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --stop --quiet --pidfile $pidfile</span></span><br><span class="line"><span class="string">  sleep 1</span></span><br><span class="line"><span class="string">  start-stop-daemon --start --quiet --background --name grafana --make-pidfile --pidfile $pidfile --stdout $logfile --chdir $workdir --user $user --exec $command</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">chown</span> -R grafana:grafana /opt/grafana</span><br><span class="line"><span class="built_in">chown</span> -R grafana:grafana /data/grafana</span><br><span class="line"><span class="built_in">chmod</span> +x /etc/init.d/grafana</span><br><span class="line">rc-update add grafana default</span><br></pre></td></tr></table></figure>
+<h3 id="Grafana-搭建"><a href="#Grafana-搭建" class="headerlink" title="Grafana 搭建"></a>Grafana 搭建</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">tar</span> zxf grafana-enterprise-11.4.0.linux-amd64.tar.gz
+<span class="token function">mv</span> grafana-v11.4.0 /opt/grafana
 
-<h3 id="Loki-搭建"><a href="#Loki-搭建" class="headerlink" title="Loki 搭建"></a>Loki 搭建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /tmp</span><br><span class="line">unzip loki-linux-amd64.zip</span><br><span class="line"><span class="built_in">mv</span> loki-linux-amd64 /opt/loki/loki</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /opt/loki/config.yaml &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">auth_enabled: false</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">server:</span></span><br><span class="line"><span class="string">  http_listen_port: 3100</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">common:</span></span><br><span class="line"><span class="string">  instance_addr: 0.0.0.0</span></span><br><span class="line"><span class="string">  path_prefix: /opt/loki</span></span><br><span class="line"><span class="string">  storage:</span></span><br><span class="line"><span class="string">    filesystem:</span></span><br><span class="line"><span class="string">      chunks_directory: /data/loki/chunks</span></span><br><span class="line"><span class="string">      rules_directory: /data/loki/rules</span></span><br><span class="line"><span class="string">  replication_factor: 1</span></span><br><span class="line"><span class="string">  ring:</span></span><br><span class="line"><span class="string">    kvstore:</span></span><br><span class="line"><span class="string">      store: inmemory</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">schema_config:</span></span><br><span class="line"><span class="string">  configs:</span></span><br><span class="line"><span class="string">    - from: 2020-10-24</span></span><br><span class="line"><span class="string">      store: tsdb</span></span><br><span class="line"><span class="string">      object_store: filesystem</span></span><br><span class="line"><span class="string">      schema: v13</span></span><br><span class="line"><span class="string">      index:</span></span><br><span class="line"><span class="string">        prefix: index_</span></span><br><span class="line"><span class="string">        period: 24h</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">ruler:</span></span><br><span class="line"><span class="string">  alertmanager_url: http://localhost:9093</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/init.d/loki &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">#!/sbin/openrc-run</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">name=&quot;loki&quot;</span></span><br><span class="line"><span class="string">description=&quot;Grafana Loki&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">command=&quot;/opt/loki/loki -- -config.file /opt/loki/config.yaml&quot;</span></span><br><span class="line"><span class="string">pidfile=/data/loki/run.pid</span></span><br><span class="line"><span class="string">logfile=/data/loki/$name.log</span></span><br><span class="line"><span class="string">user=loki</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">depend() &#123;</span></span><br><span class="line"><span class="string">  need net localmount</span></span><br><span class="line"><span class="string">  after firewall</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">start_pre() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Preparing to start $name&quot;</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">start() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Starting $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --start --quiet --background --name loki --make-pidfile --pidfile $pidfile --stderr $logfile --user $user --exec $command</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">stop() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Stopping $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --stop --quiet --pidfile $pidfile</span></span><br><span class="line"><span class="string">  if [ -e $pidfile ]</span></span><br><span class="line"><span class="string">    then rm $pidfile</span></span><br><span class="line"><span class="string">  fi</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">restart() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Restarting $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --stop --quiet --pidfile $pidfile</span></span><br><span class="line"><span class="string">  sleep 1</span></span><br><span class="line"><span class="string">  start-stop-daemon --start --quiet --background --name loki --make-pidfile --pidfile $pidfile --stderr $logfile --user $user --exec $command</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">chown</span> -R loki:loki /opt/loki</span><br><span class="line"><span class="built_in">chown</span> -R loki:loki /data/loki</span><br><span class="line"><span class="built_in">chmod</span> +x /etc/init.d/loki</span><br><span class="line">rc-update add loki default</span><br></pre></td></tr></table></figure>
+<span class="token function">cat</span> <span class="token operator">></span> /opt/grafana/conf/config.ini <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+[paths]
+data = /data/grafana/data
+logs = /data/grafana/log
+plugins = /opt/grafana/plugins
+provisioning = /opt/grafana/conf/provisioning
+EOF</span>
 
-<h3 id="Prometheus-搭建"><a href="#Prometheus-搭建" class="headerlink" title="Prometheus 搭建"></a>Prometheus 搭建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /tmp</span><br><span class="line">tar zxf prometheus-2.53.3.linux-amd64.tar.gz</span><br><span class="line"><span class="built_in">mv</span> prometheus-2.53.3.linux-amd64 /opt/prometheus</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /opt/prometheus/config.yml &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">global:</span></span><br><span class="line"><span class="string">  scrape_interval: 15s</span></span><br><span class="line"><span class="string">  evaluation_interval: 15s</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">alerting:</span></span><br><span class="line"><span class="string">  alertmanagers:</span></span><br><span class="line"><span class="string">    - static_configs:</span></span><br><span class="line"><span class="string">        - targets:</span></span><br><span class="line"><span class="string">          - localhost:9093</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">rule_files:</span></span><br><span class="line"><span class="string">  - &quot;alert_rules.yml&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">scrape_configs:</span></span><br><span class="line"><span class="string">  - job_name: &quot;EKS&quot;</span></span><br><span class="line"><span class="string">    static_configs:</span></span><br><span class="line"><span class="string">      - targets: [&quot;localhost:9090&quot;]</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          instance: EKS</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  - job_name: &quot;JW&quot;</span></span><br><span class="line"><span class="string">    static_configs:</span></span><br><span class="line"><span class="string">      - targets: [&#x27;192.168.10.2:9104&#x27;]</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          instance: JW</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /opt/prometheus/alert_rules.yml &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">groups:</span></span><br><span class="line"><span class="string">  - name: alert_rules</span></span><br><span class="line"><span class="string">    rules:</span></span><br><span class="line"><span class="string">      - alert: CPU使用告警</span></span><br><span class="line"><span class="string">        expr: sum(avg(irate(node_cpu_seconds_total&#123;mode!=&#x27;idle&#x27;&#125;[5m])) without (cpu)) by (instance) &gt; 0.60</span></span><br><span class="line"><span class="string">        for: 2m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: warning</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123; $labels.instance &#125;&#125; CPU 使用过高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123; $labels.instance &#125;&#125; CPU 使用率超过 60% (current value: &#123;&#123; $value &#125;&#125;)&quot;</span></span><br><span class="line"><span class="string">      - alert: CPU使用严重告警</span></span><br><span class="line"><span class="string">        expr: (100 - (avg by (instance) (irate(node_cpu_seconds_total&#123;job=~&quot;.*&quot;,mode=&quot;idle&quot;&#125;[5m])) * 100)) &gt; 85</span></span><br><span class="line"><span class="string">        for: 3m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: serious</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123; $labels.instance &#125;&#125; CPU 使用高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123; $labels.instance &#125;&#125; CPU 使用率超过 85% (current value: &#123;&#123; $value &#125;&#125;)&quot;</span></span><br><span class="line"><span class="string">      - alert: 内存使用告警</span></span><br><span class="line"><span class="string">        expr: avg by(instance) ((1 - (node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes) / node_memory_MemTotal_bytes) * 100) &gt; 70</span></span><br><span class="line"><span class="string">        for: 2m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: warning</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123; $labels.instance &#125;&#125; 内存使用过高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123;$labels.instance&#125;&#125;: 内存使用率超过 70% (current value is: &#123;&#123; $value &#125;&#125;)&quot;</span></span><br><span class="line"><span class="string">      - alert: 内存使用严重告警</span></span><br><span class="line"><span class="string">        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes)/node_memory_MemTotal_bytes &gt; 0.90</span></span><br><span class="line"><span class="string">        for: 3m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: serious</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123; $labels.instance &#125;&#125; 内存使用高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123; $labels.instance &#125;&#125; 内存使用率超过 90% (current value: &#123;&#123; $value &#125;&#125;)&quot;</span></span><br><span class="line"><span class="string">      - alert: 硬盘使用告警</span></span><br><span class="line"><span class="string">        expr: (1 - node_filesystem_free_bytes&#123;fstype!=&quot;rootfs&quot;,mountpoint!=&quot;&quot;,mountpoint!~&quot;/(run|var|sys|dev).*&quot;&#125; / node_filesystem_size_bytes) * 100 &gt; 80</span></span><br><span class="line"><span class="string">        for: 2m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: warning</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123; $labels.instance &#125;&#125; 硬盘使用过高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123;$labels.instance&#125;&#125;: 硬盘使用率超过 80% (current value is: &#123;&#123; $value &#125;&#125;)&quot;</span></span><br><span class="line"><span class="string">      - alert: 硬盘使用严重告警</span></span><br><span class="line"><span class="string">        expr: (1 - node_filesystem_free_bytes&#123;fstype!=&quot;rootfs&quot;,mountpoint!=&quot;&quot;,mountpoint!~&quot;/(run|var|sys|dev).*&quot;&#125; / node_filesystem_size_bytes) * 100 &gt; 90</span></span><br><span class="line"><span class="string">        for: 3m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: serious</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123; $labels.instance &#125;&#125; 硬盘使用高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123;$labels.instance&#125;&#125;: 硬盘使用率超过 90% (current value is: &#123;&#123; $value &#125;&#125;)&quot;</span></span><br><span class="line"><span class="string">      - alert: 节点文件描述符告警</span></span><br><span class="line"><span class="string">        expr: avg by (instance) (node_filefd_allocated&#123;&#125; / node_filefd_maximum&#123;&#125;) * 100 &gt; 60</span></span><br><span class="line"><span class="string">        for: 2m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: warning</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123; $labels.instance &#125;&#125; 文件描述符使用高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123;$labels.instance&#125;&#125;: 文件描述符使用超过 60% (current value is: &#123;&#123; $value &#125;&#125;)&quot;</span></span><br><span class="line"><span class="string">      - alert: 节点平均负载告警</span></span><br><span class="line"><span class="string">        expr: avg by (instance) (node_load15&#123;&#125;) &gt; 80</span></span><br><span class="line"><span class="string">        for: 2m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: warning</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123; $labels.instance &#125;&#125; 15 分钟平均负载高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123;$labels.instance&#125;&#125;: 15 分钟平均负载超过 80 (current value is: &#123;&#123; $value &#125;&#125;)&quot;</span></span><br><span class="line"><span class="string">      - alert: 节点离线告警</span></span><br><span class="line"><span class="string">        expr: avg by (instance) (up&#123;&#125;) == 0</span></span><br><span class="line"><span class="string">        for: 2m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: warning</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123;$labels.instance&#125;&#125; 当前离线&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123;$labels.instance&#125;&#125;: Node_Exporter 代理已断开 (current value is: &#123;&#123; $value &#125;&#125;)&quot;</span></span><br><span class="line"><span class="string">      - alert: 节点进程阻塞告警</span></span><br><span class="line"><span class="string">        expr: avg by (instance) (node_procs_blocked&#123;&#125;) &gt; 10</span></span><br><span class="line"><span class="string">        for: 2m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: warning</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123; $labels.instance &#125;&#125;  进程阻塞过高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123;$labels.instance&#125;&#125;: 检测到进程阻塞超过 10 (current value is: &#123;&#123; $value &#125;&#125;)&quot;</span></span><br><span class="line"><span class="string">      - alert: 网络上传告警</span></span><br><span class="line"><span class="string">        expr:  avg by (instance) (floor(irate(node_network_transmit_bytes_total&#123;&#125;[2m]) / 1024 / 1024 * 8 )) &gt; 40</span></span><br><span class="line"><span class="string">        for: 1m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: warning</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123; $labels.instance &#125;&#125; 网络上传过高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123;$labels.instance&#125;&#125;: 节点上传速率超过 40Mbps/s (current value is: &#123;&#123; $value &#125;&#125;Mbps/s)&quot;</span></span><br><span class="line"><span class="string">      - alert: 网络下载告警</span></span><br><span class="line"><span class="string">        expr:  avg by (instance) (floor(irate(node_network_receive_bytes_total&#123;&#125;[2m]) / 1024 / 1024 * 8 )) &gt; 40</span></span><br><span class="line"><span class="string">        for: 1m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: warning</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;Instance &#123;&#123; $labels.instance &#125;&#125; 网络下载过高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123;$labels.instance&#125;&#125;: 节点下载速率超过 40Mbps/s (current value is: &#123;&#123; $value &#125;&#125;Mbps/s)&quot;</span></span><br><span class="line"><span class="string">      - alert: 磁盘读取告警</span></span><br><span class="line"><span class="string">        expr: avg by (instance) (floor(irate(node_disk_read_bytes_total&#123;&#125;[2m]) / 1024 )) &gt; 5000</span></span><br><span class="line"><span class="string">        for: 10m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: warning</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123; $labels.instance &#125;&#125; 磁盘读取速率过高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123;$labels.instance&#125;&#125;: 节点磁盘读取速率超过 5000KB/s (current value is: &#123;&#123; $value &#125;&#125;KB/s)&quot;</span></span><br><span class="line"><span class="string">      - alert: 磁盘写入告警</span></span><br><span class="line"><span class="string">        expr: avg by (instance) (floor(irate(node_disk_written_bytes_total&#123;&#125;[2m]) / 1024 / 1024 )) &gt; 200</span></span><br><span class="line"><span class="string">        for: 2m</span></span><br><span class="line"><span class="string">        labels:</span></span><br><span class="line"><span class="string">          level: warning</span></span><br><span class="line"><span class="string">        annotations:</span></span><br><span class="line"><span class="string">          summary: &quot;主机 &#123;&#123; $labels.instance &#125;&#125; 磁盘写入速率过高&quot;</span></span><br><span class="line"><span class="string">          description: &quot;&#123;&#123;$labels.instance&#125;&#125;: 节点磁盘写入速率超过 20MB/s (current value is: &#123;&#123; $value &#125;&#125;MB/s)&quot;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/init.d/prometheus &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">#!/sbin/openrc-run</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">name=&quot;prometheus&quot;</span></span><br><span class="line"><span class="string">description=&quot;Prometheus Server&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">command=&quot;/opt/prometheus/prometheus -- --config.file=/opt/prometheus/config.yml --web.enable-remote-write-receiver --storage.tsdb.path=/opt/prometheus/data&quot;</span></span><br><span class="line"><span class="string">pidfile=/data/prometheus/run.pid</span></span><br><span class="line"><span class="string">logfile=/data/prometheus/$name.log</span></span><br><span class="line"><span class="string">user=prometheus</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">depend() &#123;</span></span><br><span class="line"><span class="string">  need net localmount</span></span><br><span class="line"><span class="string">  after firewall</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">start_pre() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Preparing to start $name&quot;</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">start() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Starting $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --start --quiet --background --name prometheus --make-pidfile --pidfile $pidfile --stderr $logfile --user $user --exec $command</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">stop() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Stopping $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --stop --quiet --pidfile $pidfile</span></span><br><span class="line"><span class="string">  if [ -e $pidfile ]</span></span><br><span class="line"><span class="string">    then rm $pidfile</span></span><br><span class="line"><span class="string">  fi</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">restart() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Restarting $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --stop --quiet --pidfile $pidfile</span></span><br><span class="line"><span class="string">  sleep 1</span></span><br><span class="line"><span class="string">  start-stop-daemon --start --quiet --background --name prometheus --make-pidfile --pidfile $pidfile --stderr $logfile --user $user --exec $command</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">chown</span> -R prometheus:prometheus /opt/prometheus</span><br><span class="line"><span class="built_in">chown</span> -R prometheus:prometheus /data/prometheus</span><br><span class="line"><span class="built_in">chmod</span> +x /etc/init.d/prometheus</span><br><span class="line">rc-update add prometheus default</span><br></pre></td></tr></table></figure>
+<span class="token function">cat</span> <span class="token operator">></span> /etc/init.d/grafana <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+#!/sbin/openrc-run
 
-<h3 id="AlertManager-搭建"><a href="#AlertManager-搭建" class="headerlink" title="AlertManager 搭建"></a>AlertManager 搭建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">tar zxf alertmanager-0.27.0.linux-amd64.tar.gz</span><br><span class="line"><span class="built_in">mv</span> alertmanager-0.27.0.linux-amd64 /opt/alertmanager</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /opt/alertmanager/config.yml &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">route:</span></span><br><span class="line"><span class="string">  group_by: [&#x27;alertname&#x27;]</span></span><br><span class="line"><span class="string">  group_wait: 10s</span></span><br><span class="line"><span class="string">  group_interval: 10s</span></span><br><span class="line"><span class="string">  repeat_interval: 1m</span></span><br><span class="line"><span class="string">  receiver: &#x27;dingtalk&#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">receivers:</span></span><br><span class="line"><span class="string">  - name: &#x27;web.hook&#x27;</span></span><br><span class="line"><span class="string">    webhook_configs:</span></span><br><span class="line"><span class="string">      - url: &#x27;http://127.0.0.1:5001/&#x27;</span></span><br><span class="line"><span class="string">  - name: &#x27;dingtalk&#x27;</span></span><br><span class="line"><span class="string">    webhook_configs:</span></span><br><span class="line"><span class="string">      - url: http://localhost:8060/dingtalk/webhook_mention_users/send</span></span><br><span class="line"><span class="string">        send_resolved: true</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">inhibit_rules:</span></span><br><span class="line"><span class="string">  - source_match:</span></span><br><span class="line"><span class="string">      severity: &#x27;critical&#x27;</span></span><br><span class="line"><span class="string">    target_match:</span></span><br><span class="line"><span class="string">      severity: &#x27;warning&#x27;</span></span><br><span class="line"><span class="string">    equal: [&#x27;alertname&#x27;, &#x27;dev&#x27;, &#x27;instance&#x27;]</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/init.d/alertmanager &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">#!/sbin/openrc-run</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">name=&quot;alertmanager&quot;</span></span><br><span class="line"><span class="string">description=&quot;Prometheus AlertManager&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">command=&quot;/opt/alertmanager/alertmanager -- --config.file=/opt/alertmanager/config.yml --storage.path=/opt/alertmanager/data&quot;</span></span><br><span class="line"><span class="string">pidfile=/data/alertmanager/run.pid</span></span><br><span class="line"><span class="string">logfile=/data/alertmanager/$name.log</span></span><br><span class="line"><span class="string">user=alertmanager</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">depend() &#123;</span></span><br><span class="line"><span class="string">  need net localmount</span></span><br><span class="line"><span class="string">  after firewall</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">start_pre() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Preparing to start $name&quot;</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">start() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Starting $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --start --quiet --background --name alertmanager --make-pidfile --pidfile $pidfile --stderr $logfile --user $user --exec $command</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">stop() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Stopping $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --stop --quiet --pidfile $pidfile</span></span><br><span class="line"><span class="string">  if [ -e $pidfile ]</span></span><br><span class="line"><span class="string">    then rm $pidfile</span></span><br><span class="line"><span class="string">  fi</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">restart() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Restarting $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --stop --quiet --pidfile $pidfile</span></span><br><span class="line"><span class="string">  sleep 1</span></span><br><span class="line"><span class="string">  start-stop-daemon --start --quiet --background --name alertmanager --make-pidfile --pidfile $pidfile --stderr $logfile --user $user --exec $command</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">chown</span> -R alertmanager:alertmanager /opt/alertmanager</span><br><span class="line"><span class="built_in">chown</span> -R alertmanager:alertmanager /data/alertmanager</span><br><span class="line"><span class="built_in">chmod</span> +x /etc/init.d/alertmanager</span><br><span class="line">rc-update add alertmanager default</span><br></pre></td></tr></table></figure>
+name="grafana"
+description="Grafana Server"
 
-<h3 id="钉钉告警搭建"><a href="#钉钉告警搭建" class="headerlink" title="钉钉告警搭建"></a>钉钉告警搭建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line">tar zxf prometheus-webhook-dingtalk-2.1.0.linux-amd64.tar.gz</span><br><span class="line"><span class="built_in">mv</span> prometheus-webhook-dingtalk-2.1.0.linux-amd64 /opt/dingtalk</span><br><span class="line"><span class="built_in">mv</span> /opt/dingtalk/prometheus-webhook-dingtalk /opt/dingtalk/dingtalk</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /opt/dingtalk/config.yml &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">timeout: 5s</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">templates:</span></span><br><span class="line"><span class="string">  - /opt/dingtalk/template.tmpl</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">targets:</span></span><br><span class="line"><span class="string">  webhook_robot:</span></span><br><span class="line"><span class="string">    url: https://oapi.dingtalk.com/robot/send?access_token=xxxxxxxx # 这里更换为自己的钉钉机器人api</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /opt/dingtalk/template.tmpl &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">&#123;&#123; define &quot;__subject&quot; &#125;&#125;</span></span><br><span class="line"><span class="string">[&#123;&#123; .Status | toUpper &#125;&#125;&#123;&#123; if eq .Status &quot;firing&quot; &#125;&#125;:&#123;&#123; .Alerts.Firing | len &#125;&#125;&#123;&#123; end &#125;&#125;]</span></span><br><span class="line"><span class="string">&#123;&#123; end &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;&#123; define &quot;__alert_list&quot; &#125;&#125;&#123;&#123; range . &#125;&#125;</span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string">&#123;&#123; if .Labels.owner &#125;&#125;@&#123;&#123; .Labels.owner &#125;&#125;&#123;&#123; end &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**告警主题**: &#123;&#123; .Annotations.summary &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**告警类型**: &#123;&#123; .Labels.alertname &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**告警级别**: &#123;&#123; .Labels.severity &#125;&#125; </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**告警主机**: &#123;&#123; .Labels.instance &#125;&#125; </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**告警信息**: &#123;&#123; index .Annotations &quot;description&quot; &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**告警时间**: &#123;&#123; dateInZone &quot;2006.01.02 15:04:05&quot; (.StartsAt) &quot;Asia/Shanghai&quot; &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;&#123; .Labels.Users &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123; end &#125;&#125;&#123;&#123; end &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;&#123; define &quot;__resolved_list&quot; &#125;&#125;&#123;&#123; range . &#125;&#125;</span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string">&#123;&#123; if .Labels.owner &#125;&#125;@&#123;&#123; .Labels.owner &#125;&#125;&#123;&#123; end &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**告警主题**: &#123;&#123; .Annotations.summary &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**告警类型**: &#123;&#123; .Labels.alertname &#125;&#125; </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**告警级别**: &#123;&#123; .Labels.severity &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**告警主机**: &#123;&#123; .Labels.instance &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**告警信息**: &#123;&#123; index .Annotations &quot;description&quot; &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**告警时间**: &#123;&#123; dateInZone &quot;2006.01.02 15:04:05&quot; (.StartsAt) &quot;Asia/Shanghai&quot; &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">**恢复时间**: &#123;&#123; dateInZone &quot;2006.01.02 15:04:05&quot; (.EndsAt) &quot;Asia/Shanghai&quot; &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;&#123; .Labels.Users &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123; end &#125;&#125;&#123;&#123; end &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;&#123; define &quot;default.title&quot; &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123; template &quot;__subject&quot; . &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123; end &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;&#123; define &quot;default.content&quot; &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123; if gt (len .Alerts.Firing) 0 &#125;&#125;</span></span><br><span class="line"><span class="string">&lt;font color=&quot;#FF0000&quot; size=&quot;8&quot; face=&quot;黑体&quot;&gt;**====侦测到&#123;&#123; .Alerts.Firing | len  &#125;&#125;个故障====**&lt;/font&gt;</span></span><br><span class="line"><span class="string">&#123;&#123; template &quot;__alert_list&quot; .Alerts.Firing &#125;&#125;</span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string">&#123;&#123; end &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;&#123; if gt (len .Alerts.Resolved) 0 &#125;&#125;</span></span><br><span class="line"><span class="string">&lt;font color=&quot;#00FF00&quot; size=&quot;8&quot; face=&quot;黑体&quot;&gt;**====恢复&#123;&#123; .Alerts.Resolved | len  &#125;&#125;个故障====**&lt;/font&gt;</span></span><br><span class="line"><span class="string">&#123;&#123; template &quot;__resolved_list&quot; .Alerts.Resolved &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123; end &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123; end &#125;&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;&#123; define &quot;ding.link.title&quot; &#125;&#125;&#123;&#123; template &quot;default.title&quot; . &#125;&#125;&#123;&#123; end &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123; define &quot;ding.link.content&quot; &#125;&#125;&#123;&#123; template &quot;default.content&quot; . &#125;&#125;&#123;&#123; end &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123; template &quot;default.title&quot; . &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123; template &quot;default.content&quot; . &#125;&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/init.d/dingtalk &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">#!/sbin/openrc-run</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">name=&quot;dingtalk&quot;</span></span><br><span class="line"><span class="string">description=&quot;Prometheus Webhook DingTalk&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">command=&quot;/opt/dingtalk/dingtalk -- --config.file=/opt/dingtalk/config.yml --web.listen-address=&quot;:8060&quot; --web.enable-ui --web.enable-lifecycle --log.format=json&quot;</span></span><br><span class="line"><span class="string">pidfile=/data/dingtalk/run.pid</span></span><br><span class="line"><span class="string">logfile=/data/dingtalk/$name.log</span></span><br><span class="line"><span class="string">user=dingtalk</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">depend() &#123;</span></span><br><span class="line"><span class="string">  need net localmount</span></span><br><span class="line"><span class="string">  after firewall</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">start_pre() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Preparing to start $name&quot;</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">start() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Starting $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --start --quiet --background --name dingtalk --make-pidfile --pidfile $pidfile --stderr $logfile --user $user --exec $command</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">stop() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Stopping $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --stop --quiet --pidfile $pidfile</span></span><br><span class="line"><span class="string">  if [ -e $pidfile ]</span></span><br><span class="line"><span class="string">    then rm $pidfile</span></span><br><span class="line"><span class="string">  fi</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">restart() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Restarting $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --stop --quiet --pidfile $pidfile</span></span><br><span class="line"><span class="string">  sleep 1</span></span><br><span class="line"><span class="string">  start-stop-daemon --start --quiet --background --name dingtalk --make-pidfile --pidfile $pidfile --stderr $logfile --user $user --exec $command</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">chown</span> -R dingtalk:dingtalk /opt/dingtalk</span><br><span class="line"><span class="built_in">chown</span> -R dingtalk:dingtalk /data/dingtalk</span><br><span class="line"><span class="built_in">chmod</span> +x /etc/init.d/dingtalk</span><br><span class="line">rc-update add dingtalk default</span><br></pre></td></tr></table></figure>
+command="/opt/grafana/bin/grafana server -- --config /opt/grafana/conf/config.ini"
+pidfile=/data/grafana/run.pid
+logfile=/data/grafana/<span class="token variable">$name</span>.log
+workdir=/opt/grafana
+user=grafana
 
-<h3 id="Promtail-搭建"><a href="#Promtail-搭建" class="headerlink" title="Promtail 搭建"></a>Promtail 搭建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">unzip promtail-linux-amd64.zip</span><br><span class="line"><span class="built_in">mv</span> promtail-linux-amd64 /opt/promtail/promtail</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /opt/promtail/config.yaml &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">server:</span></span><br><span class="line"><span class="string">  http_listen_port: 9080</span></span><br><span class="line"><span class="string">  grpc_listen_port: 0</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">positions:</span></span><br><span class="line"><span class="string">  filename: /data/promtail/positions.yaml</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">clients:</span></span><br><span class="line"><span class="string">  - url: http://localhost:3100/loki/api/v1/push</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">scrape_configs:</span></span><br><span class="line"><span class="string">- job_name: EKS</span></span><br><span class="line"><span class="string">  static_configs:</span></span><br><span class="line"><span class="string">  - targets:</span></span><br><span class="line"><span class="string">      - localhost</span></span><br><span class="line"><span class="string">    labels:</span></span><br><span class="line"><span class="string">      job: &quot;System Logs|EKS&quot;</span></span><br><span class="line"><span class="string">      __path__: /var/log/messages</span></span><br><span class="line"><span class="string">  - targets:</span></span><br><span class="line"><span class="string">      - localhost</span></span><br><span class="line"><span class="string">    labels:</span></span><br><span class="line"><span class="string">      job: &quot;Soft Logs|EKS&quot;</span></span><br><span class="line"><span class="string">      __path__: /data/*/*log</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/init.d/promtail &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">#!/sbin/openrc-run</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">name=&quot;promtail&quot;</span></span><br><span class="line"><span class="string">description=&quot;Promtail&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">command=&quot;/opt/promtail/promtail -- --config.file=/opt/promtail/config.yaml&quot;</span></span><br><span class="line"><span class="string">pidfile=/data/promtail/run.pid</span></span><br><span class="line"><span class="string">logfile=/data/promtail/$name.log</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">depend() &#123;</span></span><br><span class="line"><span class="string">  need net localmount</span></span><br><span class="line"><span class="string">  after firewall</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">start_pre() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Preparing to start $name&quot;</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">start() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Starting $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --start --quiet --background --name promtail --make-pidfile --pidfile $pidfile --stderr $logfile --exec $command</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">stop() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Stopping $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --stop --quiet --pidfile $pidfile</span></span><br><span class="line"><span class="string">  if [ -e $pidfile ]</span></span><br><span class="line"><span class="string">    then rm $pidfile</span></span><br><span class="line"><span class="string">  fi</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">restart() &#123;</span></span><br><span class="line"><span class="string">  ebegin &quot;Restarting $name&quot;</span></span><br><span class="line"><span class="string">  start-stop-daemon --stop --quiet --pidfile $pidfile</span></span><br><span class="line"><span class="string">  sleep 1</span></span><br><span class="line"><span class="string">  start-stop-daemon --start --quiet --background --name promtail --make-pidfile --pidfile $pidfile --stderr $logfile --exec $command</span></span><br><span class="line"><span class="string">  eend $?</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">chmod</span> +x /etc/init.d/promtail</span><br><span class="line">rc-update add promtail default</span><br></pre></td></tr></table></figure>
+depend() &#123;
+  need net localmount
+  after firewall
+&#125;
 
-<h3 id="启动各项服务"><a href="#启动各项服务" class="headerlink" title="启动各项服务"></a>启动各项服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">service grafana start</span><br><span class="line">service loki start</span><br><span class="line">service prometheus start</span><br><span class="line">service alertmanager start</span><br><span class="line">service dingtalk start</span><br><span class="line">service promtail start</span><br></pre></td></tr></table></figure>
+start_pre() &#123;
+  ebegin "Preparing to start <span class="token variable">$name</span>"
+  eend <span class="token variable">$?</span>
+&#125;
 
-<h2 id="客户端搭建"><a href="#客户端搭建" class="headerlink" title="客户端搭建"></a>客户端搭建</h2><h3 id="Promtail-搭建-1"><a href="#Promtail-搭建-1" class="headerlink" title="Promtail 搭建"></a>Promtail 搭建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /tmp</span><br><span class="line">wget -c https://github.com/grafana/loki/releases/download/v3.3.1/promtail-linux-amd64.zip</span><br><span class="line">unzip promtail-linux-amd64.zip</span><br><span class="line"><span class="built_in">mkdir</span> -p /opt/promtail</span><br><span class="line"><span class="built_in">mkdir</span> -p /data/promtail</span><br><span class="line"><span class="built_in">mv</span> promtail-linux-amd64 /opt/promtail/promtail</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> /opt/promtail/config.yaml &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">server:</span></span><br><span class="line"><span class="string">  http_listen_port: 9080</span></span><br><span class="line"><span class="string">  grpc_listen_port: 0</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">positions:</span></span><br><span class="line"><span class="string">  filename: /data/promtail/positions.yaml</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">clients:</span></span><br><span class="line"><span class="string">  - url: http://192.168.10.1:3100/loki/api/v1/push</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">scrape_configs:</span></span><br><span class="line"><span class="string">- job_name: MongoDB</span></span><br><span class="line"><span class="string">  static_configs:</span></span><br><span class="line"><span class="string">  - targets:</span></span><br><span class="line"><span class="string">      - localhost</span></span><br><span class="line"><span class="string">    labels:</span></span><br><span class="line"><span class="string">      job: &quot;System Logs|MongoDB&quot;</span></span><br><span class="line"><span class="string">      __path__: /var/log/*log</span></span><br><span class="line"><span class="string">  - targets:</span></span><br><span class="line"><span class="string">      - localhost</span></span><br><span class="line"><span class="string">    labels:</span></span><br><span class="line"><span class="string">      job: &quot;MongoDB Logs|MongoDB&quot;</span></span><br><span class="line"><span class="string">      __path__: /var/log/mongodb/*log</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/systemd/system/promtail.service &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">[Unit]</span></span><br><span class="line"><span class="string">Description=Promtail</span></span><br><span class="line"><span class="string">Documentation=https://github.com/grafana/loki</span></span><br><span class="line"><span class="string">After=network.target</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[Service]</span></span><br><span class="line"><span class="string">Type=simple</span></span><br><span class="line"><span class="string">ExecStart=/opt/promtail/promtail --config.file=/opt/promtail/config.yaml</span></span><br><span class="line"><span class="string">Restart=on-failure</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[Install]</span></span><br><span class="line"><span class="string">WantedBy=multi-user.target</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl <span class="built_in">enable</span> promtail.service</span><br><span class="line">systemctl start promtail.service</span><br></pre></td></tr></table></figure>
+start() &#123;
+  ebegin "Starting <span class="token variable">$name</span>"
+  start-stop-daemon --start --quiet --background --name grafana --make-pidfile --pidfile <span class="token variable">$pidfile</span> --stdout <span class="token variable">$logfile</span> --chdir <span class="token variable">$workdir</span> --user <span class="token variable">$user</span> --exec <span class="token variable">$command</span>
+  eend <span class="token variable">$?</span>
+&#125;
 
-<h3 id="Node-Exporter-搭建"><a href="#Node-Exporter-搭建" class="headerlink" title="Node Exporter 搭建"></a>Node Exporter 搭建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /tmp</span><br><span class="line">wget -c https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz</span><br><span class="line">tar zxf node_exporter-1.8.2.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="built_in">mkdir</span> -p /data/exporter</span><br><span class="line"><span class="built_in">mkdir</span> -p /opt/exporter</span><br><span class="line"><span class="built_in">mv</span> node_exporter-1.8.2.linux-amd64 /opt/exporter</span><br><span class="line"><span class="built_in">mv</span> /opt/exporter/node_exporter /opt/exporter/exporter</span><br><span class="line"></span><br><span class="line">useradd -r -M exporter</span><br><span class="line"><span class="built_in">chown</span> -R exporter:exporter /data/exporter</span><br><span class="line"><span class="built_in">chown</span> -R exporter:exporter /opt/exporter</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/systemd/system/exporter.service &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">[Unit]</span></span><br><span class="line"><span class="string">Description=Prometheus Node Exporter</span></span><br><span class="line"><span class="string">After=network.target</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">[Service]</span></span><br><span class="line"><span class="string">Restart=on-failure</span></span><br><span class="line"><span class="string">ExecStart=/opt/exporter/exporter --web.listen-address=:9104</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">[Install]</span></span><br><span class="line"><span class="string">WantedBy=multi-user.target</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl <span class="built_in">enable</span> exporter.service</span><br><span class="line">systemctl start exporter.service</span><br></pre></td></tr></table></figure>
+stop() &#123;
+  ebegin "Stopping <span class="token variable">$name</span>"
+  start-stop-daemon --stop --quiet --pidfile <span class="token variable">$pidfile</span>
+  if [ -e <span class="token variable">$pidfile</span> ]
+    then rm <span class="token variable">$pidfile</span>
+  fi
+  eend <span class="token variable">$?</span>
+&#125;
 
-<h2 id="面板使用"><a href="#面板使用" class="headerlink" title="面板使用"></a>面板使用</h2><p>打开 Grafana 面板并登陆：<a href="http://192.168.10.1:3000，默认账号密码为">http://192.168.10.1:3000，默认账号密码为</a> admin&#x2F;admin</p>
+restart() &#123;
+  ebegin "Restarting <span class="token variable">$name</span>"
+  start-stop-daemon --stop --quiet --pidfile <span class="token variable">$pidfile</span>
+  sleep 1
+  start-stop-daemon --start --quiet --background --name grafana --make-pidfile --pidfile <span class="token variable">$pidfile</span> --stdout <span class="token variable">$logfile</span> --chdir <span class="token variable">$workdir</span> --user <span class="token variable">$user</span> --exec <span class="token variable">$command</span>
+  eend <span class="token variable">$?</span>
+&#125;
+EOF</span>
+
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> grafana:grafana /opt/grafana
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> grafana:grafana /data/grafana
+<span class="token function">chmod</span> +x /etc/init.d/grafana
+rc-update <span class="token function">add</span> grafana default<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Loki-搭建"><a href="#Loki-搭建" class="headerlink" title="Loki 搭建"></a>Loki 搭建</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /tmp
+<span class="token function">unzip</span> loki-linux-amd64.zip
+<span class="token function">mv</span> loki-linux-amd64 /opt/loki/loki
+
+<span class="token function">cat</span> <span class="token operator">></span> /opt/loki/config.yaml <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+common:
+  instance_addr: 0.0.0.0
+  path_prefix: /opt/loki
+  storage:
+    filesystem:
+      chunks_directory: /data/loki/chunks
+      rules_directory: /data/loki/rules
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
+
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: tsdb
+      object_store: filesystem
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
+
+ruler:
+  alertmanager_url: http://localhost:9093
+EOF</span>
+
+<span class="token function">cat</span> <span class="token operator">></span> /etc/init.d/loki <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+#!/sbin/openrc-run
+
+name="loki"
+description="Grafana Loki"
+
+command="/opt/loki/loki -- -config.file /opt/loki/config.yaml"
+pidfile=/data/loki/run.pid
+logfile=/data/loki/<span class="token variable">$name</span>.log
+user=loki
+
+depend() &#123;
+  need net localmount
+  after firewall
+&#125;
+
+start_pre() &#123;
+  ebegin "Preparing to start <span class="token variable">$name</span>"
+  eend <span class="token variable">$?</span>
+&#125;
+
+start() &#123;
+  ebegin "Starting <span class="token variable">$name</span>"
+  start-stop-daemon --start --quiet --background --name loki --make-pidfile --pidfile <span class="token variable">$pidfile</span> --stderr <span class="token variable">$logfile</span> --user <span class="token variable">$user</span> --exec <span class="token variable">$command</span>
+  eend <span class="token variable">$?</span>
+&#125;
+
+stop() &#123;
+  ebegin "Stopping <span class="token variable">$name</span>"
+  start-stop-daemon --stop --quiet --pidfile <span class="token variable">$pidfile</span>
+  if [ -e <span class="token variable">$pidfile</span> ]
+    then rm <span class="token variable">$pidfile</span>
+  fi
+  eend <span class="token variable">$?</span>
+&#125;
+
+restart() &#123;
+  ebegin "Restarting <span class="token variable">$name</span>"
+  start-stop-daemon --stop --quiet --pidfile <span class="token variable">$pidfile</span>
+  sleep 1
+  start-stop-daemon --start --quiet --background --name loki --make-pidfile --pidfile <span class="token variable">$pidfile</span> --stderr <span class="token variable">$logfile</span> --user <span class="token variable">$user</span> --exec <span class="token variable">$command</span>
+  eend <span class="token variable">$?</span>
+&#125;
+EOF</span>
+
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> loki:loki /opt/loki
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> loki:loki /data/loki
+<span class="token function">chmod</span> +x /etc/init.d/loki
+rc-update <span class="token function">add</span> loki default<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Prometheus-搭建"><a href="#Prometheus-搭建" class="headerlink" title="Prometheus 搭建"></a>Prometheus 搭建</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /tmp
+<span class="token function">tar</span> zxf prometheus-2.53.3.linux-amd64.tar.gz
+<span class="token function">mv</span> prometheus-2.53.3.linux-amd64 /opt/prometheus
+
+<span class="token function">cat</span> <span class="token operator">></span> /opt/prometheus/config.yml <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - localhost:9093
+
+rule_files:
+  - "alert_rules.yml"
+
+scrape_configs:
+  - job_name: "EKS"
+    static_configs:
+      - targets: ["localhost:9090"]
+        labels:
+          instance: EKS
+
+  - job_name: "JW"
+    static_configs:
+      - targets: ['192.168.10.2:9104']
+        labels:
+          instance: JW
+EOF</span>
+
+<span class="token function">cat</span> <span class="token operator">></span> /opt/prometheus/alert_rules.yml <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+groups:
+  - name: alert_rules
+    rules:
+      - alert: CPU使用告警
+        expr: sum(avg(irate(node_cpu_seconds_total&#123;mode!='idle'&#125;[5m])) without (cpu)) by (instance) > 0.60
+        for: 2m
+        labels:
+          level: warning
+        annotations:
+          summary: "主机 &#123;&#123; <span class="token variable">$labels</span>.instance &#125;&#125; CPU 使用过高"
+          description: "&#123;&#123; <span class="token variable">$labels</span>.instance &#125;&#125; CPU 使用率超过 60% (current value: &#123;&#123; <span class="token variable">$value</span> &#125;&#125;)"
+      - alert: CPU使用严重告警
+        expr: (100 - (avg by (instance) (irate(node_cpu_seconds_total&#123;job=~".*",mode="idle"&#125;[5m])) * 100)) > 85
+        for: 3m
+        labels:
+          level: serious
+        annotations:
+          summary: "主机 &#123;&#123; <span class="token variable">$labels</span>.instance &#125;&#125; CPU 使用高"
+          description: "&#123;&#123; <span class="token variable">$labels</span>.instance &#125;&#125; CPU 使用率超过 85% (current value: &#123;&#123; <span class="token variable">$value</span> &#125;&#125;)"
+      - alert: 内存使用告警
+        expr: avg by(instance) <span class="token variable"><span class="token punctuation">((</span><span class="token number">1</span> <span class="token operator">-</span> <span class="token punctuation">(</span>node_memory_MemFree_bytes <span class="token operator">+</span> node_memory_Buffers_bytes <span class="token operator">+</span> node_memory_Cached_bytes<span class="token punctuation">)</span> <span class="token operator">/</span> node_memory_MemTotal_bytes<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">70</span>
+        for<span class="token operator">:</span> <span class="token number">2</span>m
+        labels<span class="token operator">:</span>
+          level<span class="token operator">:</span> warning
+        annotations<span class="token operator">:</span>
+          summary<span class="token operator">:</span> "主机 &#123;&#123; $labels.instance &#125;&#125; 内存使用过高"
+          description<span class="token operator">:</span> "&#123;&#123;$labels.instance&#125;&#125;<span class="token operator">:</span> 内存使用率超过 <span class="token number">70</span><span class="token operator">%</span> <span class="token punctuation">(</span>current value is<span class="token operator">:</span> &#123;&#123; $value &#125;&#125;<span class="token punctuation">)</span>"
+      <span class="token operator">-</span> alert<span class="token operator">:</span> 内存使用严重告警
+        expr<span class="token operator">:</span> <span class="token punctuation">(</span>node_memory_MemTotal_bytes <span class="token operator">-</span> node_memory_MemAvailable_bytes<span class="token punctuation">)</span><span class="token operator">/</span>node_memory_MemTotal_bytes <span class="token operator">></span> <span class="token number">0.90</span>
+        for<span class="token operator">:</span> <span class="token number">3</span>m
+        labels<span class="token operator">:</span>
+          level<span class="token operator">:</span> serious
+        annotations<span class="token operator">:</span>
+          summary<span class="token operator">:</span> "主机 &#123;&#123; $labels.instance &#125;&#125; 内存使用高"
+          description<span class="token operator">:</span> "&#123;&#123; $labels.instance &#125;&#125; 内存使用率超过 <span class="token number">90</span><span class="token operator">%</span> <span class="token punctuation">(</span>current value<span class="token operator">:</span> &#123;&#123; $value &#125;&#125;<span class="token punctuation">)</span>"
+      <span class="token operator">-</span> alert<span class="token operator">:</span> 硬盘使用告警
+        expr<span class="token operator">:</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">-</span> node_filesystem_free_bytes&#123;fstype<span class="token operator">!=</span>"rootfs"<span class="token punctuation">,</span>mountpoint<span class="token operator">!=</span>""<span class="token punctuation">,</span>mountpoint<span class="token operator">!</span><span class="token operator">~</span>"<span class="token operator">/</span><span class="token punctuation">(</span>run<span class="token operator">|</span>var<span class="token operator">|</span>sys<span class="token operator">|</span>dev<span class="token punctuation">)</span>.<span class="token operator">*</span>"&#125; <span class="token operator">/</span> node_filesystem_size_bytes<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span> <span class="token operator">></span> <span class="token number">80</span>
+        for<span class="token operator">:</span> <span class="token number">2</span>m
+        labels<span class="token operator">:</span>
+          level<span class="token operator">:</span> warning
+        annotations<span class="token operator">:</span>
+          summary<span class="token operator">:</span> "主机 &#123;&#123; $labels.instance &#125;&#125; 硬盘使用过高"
+          description<span class="token operator">:</span> "&#123;&#123;$labels.instance&#125;&#125;<span class="token operator">:</span> 硬盘使用率超过 <span class="token number">80</span><span class="token operator">%</span> <span class="token punctuation">(</span>current value is<span class="token operator">:</span> &#123;&#123; $value &#125;&#125;<span class="token punctuation">)</span>"
+      <span class="token operator">-</span> alert<span class="token operator">:</span> 硬盘使用严重告警
+        expr<span class="token operator">:</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">-</span> node_filesystem_free_bytes&#123;fstype<span class="token operator">!=</span>"rootfs"<span class="token punctuation">,</span>mountpoint<span class="token operator">!=</span>""<span class="token punctuation">,</span>mountpoint<span class="token operator">!</span><span class="token operator">~</span>"<span class="token operator">/</span><span class="token punctuation">(</span>run<span class="token operator">|</span>var<span class="token operator">|</span>sys<span class="token operator">|</span>dev<span class="token punctuation">)</span>.<span class="token operator">*</span>"&#125; <span class="token operator">/</span> node_filesystem_size_bytes<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span> <span class="token operator">></span> <span class="token number">90</span>
+        for<span class="token operator">:</span> <span class="token number">3</span>m
+        labels<span class="token operator">:</span>
+          level<span class="token operator">:</span> serious
+        annotations<span class="token operator">:</span>
+          summary<span class="token operator">:</span> "主机 &#123;&#123; $labels.instance &#125;&#125; 硬盘使用高"
+          description<span class="token operator">:</span> "&#123;&#123;$labels.instance&#125;&#125;<span class="token operator">:</span> 硬盘使用率超过 <span class="token number">90</span><span class="token operator">%</span> <span class="token punctuation">(</span>current value is<span class="token operator">:</span> &#123;&#123; $value &#125;&#125;<span class="token punctuation">)</span>"
+      <span class="token operator">-</span> alert<span class="token operator">:</span> 节点文件描述符告警
+        expr<span class="token operator">:</span> avg by <span class="token punctuation">(</span>instance<span class="token punctuation">)</span> <span class="token punctuation">(</span>node_filefd_allocated&#123;&#125; <span class="token operator">/</span> node_filefd_maximum&#123;&#125;<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span> <span class="token operator">></span> <span class="token number">60</span>
+        for<span class="token operator">:</span> <span class="token number">2</span>m
+        labels<span class="token operator">:</span>
+          level<span class="token operator">:</span> warning
+        annotations<span class="token operator">:</span>
+          summary<span class="token operator">:</span> "主机 &#123;&#123; $labels.instance &#125;&#125; 文件描述符使用高"
+          description<span class="token operator">:</span> "&#123;&#123;$labels.instance&#125;&#125;<span class="token operator">:</span> 文件描述符使用超过 <span class="token number">60</span><span class="token operator">%</span> <span class="token punctuation">(</span>current value is<span class="token operator">:</span> &#123;&#123; $value &#125;&#125;<span class="token punctuation">)</span>"
+      <span class="token operator">-</span> alert<span class="token operator">:</span> 节点平均负载告警
+        expr<span class="token operator">:</span> avg by <span class="token punctuation">(</span>instance<span class="token punctuation">)</span> <span class="token punctuation">(</span>node_load15&#123;&#125;<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">80</span>
+        for<span class="token operator">:</span> <span class="token number">2</span>m
+        labels<span class="token operator">:</span>
+          level<span class="token operator">:</span> warning
+        annotations<span class="token operator">:</span>
+          summary<span class="token operator">:</span> "主机 &#123;&#123; $labels.instance &#125;&#125; <span class="token number">15</span> 分钟平均负载高"
+          description<span class="token operator">:</span> "&#123;&#123;$labels.instance&#125;&#125;<span class="token operator">:</span> <span class="token number">15</span> 分钟平均负载超过 <span class="token number">80</span> <span class="token punctuation">(</span>current value is<span class="token operator">:</span> &#123;&#123; $value &#125;&#125;<span class="token punctuation">)</span>"
+      <span class="token operator">-</span> alert<span class="token operator">:</span> 节点离线告警
+        expr<span class="token operator">:</span> avg by <span class="token punctuation">(</span>instance<span class="token punctuation">)</span> <span class="token punctuation">(</span>up&#123;&#125;<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span>
+        for<span class="token operator">:</span> <span class="token number">2</span>m
+        labels<span class="token operator">:</span>
+          level<span class="token operator">:</span> warning
+        annotations<span class="token operator">:</span>
+          summary<span class="token operator">:</span> "主机 &#123;&#123;$labels.instance&#125;&#125; 当前离线"
+          description<span class="token operator">:</span> "&#123;&#123;$labels.instance&#125;&#125;<span class="token operator">:</span> Node_Exporter 代理已断开 <span class="token punctuation">(</span>current value is<span class="token operator">:</span> &#123;&#123; $value &#125;&#125;<span class="token punctuation">)</span>"
+      <span class="token operator">-</span> alert<span class="token operator">:</span> 节点进程阻塞告警
+        expr<span class="token operator">:</span> avg by <span class="token punctuation">(</span>instance<span class="token punctuation">)</span> <span class="token punctuation">(</span>node_procs_blocked&#123;&#125;<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">10</span>
+        for<span class="token operator">:</span> <span class="token number">2</span>m
+        labels<span class="token operator">:</span>
+          level<span class="token operator">:</span> warning
+        annotations<span class="token operator">:</span>
+          summary<span class="token operator">:</span> "主机 &#123;&#123; $labels.instance &#125;&#125;  进程阻塞过高"
+          description<span class="token operator">:</span> "&#123;&#123;$labels.instance&#125;&#125;<span class="token operator">:</span> 检测到进程阻塞超过 <span class="token number">10</span> <span class="token punctuation">(</span>current value is<span class="token operator">:</span> &#123;&#123; $value &#125;&#125;<span class="token punctuation">)</span>"
+      <span class="token operator">-</span> alert<span class="token operator">:</span> 网络上传告警
+        expr<span class="token operator">:</span>  avg by <span class="token punctuation">(</span>instance<span class="token punctuation">)</span> <span class="token punctuation">(</span>floor<span class="token punctuation">(</span>irate<span class="token punctuation">(</span>node_network_transmit_bytes_total&#123;&#125;[<span class="token number">2</span>m]<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">1024</span> <span class="token operator">/</span> <span class="token number">1024</span> <span class="token operator">*</span> <span class="token number">8</span> <span class="token punctuation">))</span></span> > 40
+        for: 1m
+        labels:
+          level: warning
+        annotations:
+          summary: "主机 &#123;&#123; <span class="token variable">$labels</span>.instance &#125;&#125; 网络上传过高"
+          description: "&#123;&#123;<span class="token variable">$labels</span>.instance&#125;&#125;: 节点上传速率超过 40Mbps/s (current value is: &#123;&#123; <span class="token variable">$value</span> &#125;&#125;Mbps/s)"
+      - alert: 网络下载告警
+        expr:  avg by (instance) (floor(irate(node_network_receive_bytes_total&#123;&#125;[2m]) / 1024 / 1024 * 8 )) > 40
+        for: 1m
+        labels:
+          level: warning
+        annotations:
+          summary: "Instance &#123;&#123; <span class="token variable">$labels</span>.instance &#125;&#125; 网络下载过高"
+          description: "&#123;&#123;<span class="token variable">$labels</span>.instance&#125;&#125;: 节点下载速率超过 40Mbps/s (current value is: &#123;&#123; <span class="token variable">$value</span> &#125;&#125;Mbps/s)"
+      - alert: 磁盘读取告警
+        expr: avg by (instance) (floor(irate(node_disk_read_bytes_total&#123;&#125;[2m]) / 1024 )) > 5000
+        for: 10m
+        labels:
+          level: warning
+        annotations:
+          summary: "主机 &#123;&#123; <span class="token variable">$labels</span>.instance &#125;&#125; 磁盘读取速率过高"
+          description: "&#123;&#123;<span class="token variable">$labels</span>.instance&#125;&#125;: 节点磁盘读取速率超过 5000KB/s (current value is: &#123;&#123; <span class="token variable">$value</span> &#125;&#125;KB/s)"
+      - alert: 磁盘写入告警
+        expr: avg by (instance) (floor(irate(node_disk_written_bytes_total&#123;&#125;[2m]) / 1024 / 1024 )) > 200
+        for: 2m
+        labels:
+          level: warning
+        annotations:
+          summary: "主机 &#123;&#123; <span class="token variable">$labels</span>.instance &#125;&#125; 磁盘写入速率过高"
+          description: "&#123;&#123;<span class="token variable">$labels</span>.instance&#125;&#125;: 节点磁盘写入速率超过 20MB/s (current value is: &#123;&#123; <span class="token variable">$value</span> &#125;&#125;MB/s)"
+EOF</span>
+
+<span class="token function">cat</span> <span class="token operator">></span> /etc/init.d/prometheus <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+#!/sbin/openrc-run
+
+name="prometheus"
+description="Prometheus Server"
+
+command="/opt/prometheus/prometheus -- --config.file=/opt/prometheus/config.yml --web.enable-remote-write-receiver --storage.tsdb.path=/opt/prometheus/data"
+pidfile=/data/prometheus/run.pid
+logfile=/data/prometheus/<span class="token variable">$name</span>.log
+user=prometheus
+
+depend() &#123;
+  need net localmount
+  after firewall
+&#125;
+
+start_pre() &#123;
+  ebegin "Preparing to start <span class="token variable">$name</span>"
+  eend <span class="token variable">$?</span>
+&#125;
+
+start() &#123;
+  ebegin "Starting <span class="token variable">$name</span>"
+  start-stop-daemon --start --quiet --background --name prometheus --make-pidfile --pidfile <span class="token variable">$pidfile</span> --stderr <span class="token variable">$logfile</span> --user <span class="token variable">$user</span> --exec <span class="token variable">$command</span>
+  eend <span class="token variable">$?</span>
+&#125;
+
+stop() &#123;
+  ebegin "Stopping <span class="token variable">$name</span>"
+  start-stop-daemon --stop --quiet --pidfile <span class="token variable">$pidfile</span>
+  if [ -e <span class="token variable">$pidfile</span> ]
+    then rm <span class="token variable">$pidfile</span>
+  fi
+  eend <span class="token variable">$?</span>
+&#125;
+
+restart() &#123;
+  ebegin "Restarting <span class="token variable">$name</span>"
+  start-stop-daemon --stop --quiet --pidfile <span class="token variable">$pidfile</span>
+  sleep 1
+  start-stop-daemon --start --quiet --background --name prometheus --make-pidfile --pidfile <span class="token variable">$pidfile</span> --stderr <span class="token variable">$logfile</span> --user <span class="token variable">$user</span> --exec <span class="token variable">$command</span>
+  eend <span class="token variable">$?</span>
+&#125;
+EOF</span>
+
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> prometheus:prometheus /opt/prometheus
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> prometheus:prometheus /data/prometheus
+<span class="token function">chmod</span> +x /etc/init.d/prometheus
+rc-update <span class="token function">add</span> prometheus default<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="AlertManager-搭建"><a href="#AlertManager-搭建" class="headerlink" title="AlertManager 搭建"></a>AlertManager 搭建</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">tar</span> zxf alertmanager-0.27.0.linux-amd64.tar.gz
+<span class="token function">mv</span> alertmanager-0.27.0.linux-amd64 /opt/alertmanager
+
+<span class="token function">cat</span> <span class="token operator">></span> /opt/alertmanager/config.yml <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1m
+  receiver: 'dingtalk'
+
+receivers:
+  - name: 'web.hook'
+    webhook_configs:
+      - url: 'http://127.0.0.1:5001/'
+  - name: 'dingtalk'
+    webhook_configs:
+      - url: http://localhost:8060/dingtalk/webhook_mention_users/send
+        send_resolved: true
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
+EOF</span>
+
+<span class="token function">cat</span> <span class="token operator">></span> /etc/init.d/alertmanager <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+#!/sbin/openrc-run
+
+name="alertmanager"
+description="Prometheus AlertManager"
+
+command="/opt/alertmanager/alertmanager -- --config.file=/opt/alertmanager/config.yml --storage.path=/opt/alertmanager/data"
+pidfile=/data/alertmanager/run.pid
+logfile=/data/alertmanager/<span class="token variable">$name</span>.log
+user=alertmanager
+
+depend() &#123;
+  need net localmount
+  after firewall
+&#125;
+
+start_pre() &#123;
+  ebegin "Preparing to start <span class="token variable">$name</span>"
+  eend <span class="token variable">$?</span>
+&#125;
+
+start() &#123;
+  ebegin "Starting <span class="token variable">$name</span>"
+  start-stop-daemon --start --quiet --background --name alertmanager --make-pidfile --pidfile <span class="token variable">$pidfile</span> --stderr <span class="token variable">$logfile</span> --user <span class="token variable">$user</span> --exec <span class="token variable">$command</span>
+  eend <span class="token variable">$?</span>
+&#125;
+
+stop() &#123;
+  ebegin "Stopping <span class="token variable">$name</span>"
+  start-stop-daemon --stop --quiet --pidfile <span class="token variable">$pidfile</span>
+  if [ -e <span class="token variable">$pidfile</span> ]
+    then rm <span class="token variable">$pidfile</span>
+  fi
+  eend <span class="token variable">$?</span>
+&#125;
+
+restart() &#123;
+  ebegin "Restarting <span class="token variable">$name</span>"
+  start-stop-daemon --stop --quiet --pidfile <span class="token variable">$pidfile</span>
+  sleep 1
+  start-stop-daemon --start --quiet --background --name alertmanager --make-pidfile --pidfile <span class="token variable">$pidfile</span> --stderr <span class="token variable">$logfile</span> --user <span class="token variable">$user</span> --exec <span class="token variable">$command</span>
+  eend <span class="token variable">$?</span>
+&#125;
+EOF</span>
+
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> alertmanager:alertmanager /opt/alertmanager
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> alertmanager:alertmanager /data/alertmanager
+<span class="token function">chmod</span> +x /etc/init.d/alertmanager
+rc-update <span class="token function">add</span> alertmanager default<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="钉钉告警搭建"><a href="#钉钉告警搭建" class="headerlink" title="钉钉告警搭建"></a>钉钉告警搭建</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">tar</span> zxf prometheus-webhook-dingtalk-2.1.0.linux-amd64.tar.gz
+<span class="token function">mv</span> prometheus-webhook-dingtalk-2.1.0.linux-amd64 /opt/dingtalk
+<span class="token function">mv</span> /opt/dingtalk/prometheus-webhook-dingtalk /opt/dingtalk/dingtalk
+
+<span class="token function">cat</span> <span class="token operator">></span> /opt/dingtalk/config.yml <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+timeout: 5s
+
+templates:
+  - /opt/dingtalk/template.tmpl
+
+targets:
+  webhook_robot:
+    url: https://oapi.dingtalk.com/robot/send?access_token=xxxxxxxx # 这里更换为自己的钉钉机器人api
+EOF</span>
+
+<span class="token function">cat</span> <span class="token operator">></span> /opt/dingtalk/template.tmpl <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+&#123;&#123; define "__subject" &#125;&#125;
+[&#123;&#123; .Status | toUpper &#125;&#125;&#123;&#123; if eq .Status "firing" &#125;&#125;:&#123;&#123; .Alerts.Firing | len &#125;&#125;&#123;&#123; end &#125;&#125;]
+&#123;&#123; end &#125;&#125;
+
+&#123;&#123; define "__alert_list" &#125;&#125;&#123;&#123; range . &#125;&#125;
+---
+&#123;&#123; if .Labels.owner &#125;&#125;@&#123;&#123; .Labels.owner &#125;&#125;&#123;&#123; end &#125;&#125;
+
+**告警主题**: &#123;&#123; .Annotations.summary &#125;&#125;
+
+**告警类型**: &#123;&#123; .Labels.alertname &#125;&#125;
+
+**告警级别**: &#123;&#123; .Labels.severity &#125;&#125; 
+
+**告警主机**: &#123;&#123; .Labels.instance &#125;&#125; 
+
+**告警信息**: &#123;&#123; index .Annotations "description" &#125;&#125;
+
+**告警时间**: &#123;&#123; dateInZone "2006.01.02 15:04:05" (.StartsAt) "Asia/Shanghai" &#125;&#125;
+
+&#123;&#123; .Labels.Users &#125;&#125;
+&#123;&#123; end &#125;&#125;&#123;&#123; end &#125;&#125;
+
+&#123;&#123; define "__resolved_list" &#125;&#125;&#123;&#123; range . &#125;&#125;
+---
+&#123;&#123; if .Labels.owner &#125;&#125;@&#123;&#123; .Labels.owner &#125;&#125;&#123;&#123; end &#125;&#125;
+
+**告警主题**: &#123;&#123; .Annotations.summary &#125;&#125;
+
+**告警类型**: &#123;&#123; .Labels.alertname &#125;&#125; 
+
+**告警级别**: &#123;&#123; .Labels.severity &#125;&#125;
+
+**告警主机**: &#123;&#123; .Labels.instance &#125;&#125;
+
+**告警信息**: &#123;&#123; index .Annotations "description" &#125;&#125;
+
+**告警时间**: &#123;&#123; dateInZone "2006.01.02 15:04:05" (.StartsAt) "Asia/Shanghai" &#125;&#125;
+
+**恢复时间**: &#123;&#123; dateInZone "2006.01.02 15:04:05" (.EndsAt) "Asia/Shanghai" &#125;&#125;
+
+&#123;&#123; .Labels.Users &#125;&#125;
+&#123;&#123; end &#125;&#125;&#123;&#123; end &#125;&#125;
+
+
+&#123;&#123; define "default.title" &#125;&#125;
+&#123;&#123; template "__subject" . &#125;&#125;
+&#123;&#123; end &#125;&#125;
+
+&#123;&#123; define "default.content" &#125;&#125;
+&#123;&#123; if gt (len .Alerts.Firing) 0 &#125;&#125;
+&lt;font color="#FF0000" size="8" face="黑体">**====侦测到&#123;&#123; .Alerts.Firing | len  &#125;&#125;个故障====**&lt;/font>
+&#123;&#123; template "__alert_list" .Alerts.Firing &#125;&#125;
+---
+&#123;&#123; end &#125;&#125;
+
+&#123;&#123; if gt (len .Alerts.Resolved) 0 &#125;&#125;
+&lt;font color="#00FF00" size="8" face="黑体">**====恢复&#123;&#123; .Alerts.Resolved | len  &#125;&#125;个故障====**&lt;/font>
+&#123;&#123; template "__resolved_list" .Alerts.Resolved &#125;&#125;
+&#123;&#123; end &#125;&#125;
+&#123;&#123; end &#125;&#125;
+
+
+&#123;&#123; define "ding.link.title" &#125;&#125;&#123;&#123; template "default.title" . &#125;&#125;&#123;&#123; end &#125;&#125;
+&#123;&#123; define "ding.link.content" &#125;&#125;&#123;&#123; template "default.content" . &#125;&#125;&#123;&#123; end &#125;&#125;
+&#123;&#123; template "default.title" . &#125;&#125;
+&#123;&#123; template "default.content" . &#125;&#125;
+EOF</span>
+
+<span class="token function">cat</span> <span class="token operator">></span> /etc/init.d/dingtalk <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+#!/sbin/openrc-run
+
+name="dingtalk"
+description="Prometheus Webhook DingTalk"
+
+command="/opt/dingtalk/dingtalk -- --config.file=/opt/dingtalk/config.yml --web.listen-address=":8060" --web.enable-ui --web.enable-lifecycle --log.format=json"
+pidfile=/data/dingtalk/run.pid
+logfile=/data/dingtalk/<span class="token variable">$name</span>.log
+user=dingtalk
+
+depend() &#123;
+  need net localmount
+  after firewall
+&#125;
+
+start_pre() &#123;
+  ebegin "Preparing to start <span class="token variable">$name</span>"
+  eend <span class="token variable">$?</span>
+&#125;
+
+start() &#123;
+  ebegin "Starting <span class="token variable">$name</span>"
+  start-stop-daemon --start --quiet --background --name dingtalk --make-pidfile --pidfile <span class="token variable">$pidfile</span> --stderr <span class="token variable">$logfile</span> --user <span class="token variable">$user</span> --exec <span class="token variable">$command</span>
+  eend <span class="token variable">$?</span>
+&#125;
+
+stop() &#123;
+  ebegin "Stopping <span class="token variable">$name</span>"
+  start-stop-daemon --stop --quiet --pidfile <span class="token variable">$pidfile</span>
+  if [ -e <span class="token variable">$pidfile</span> ]
+    then rm <span class="token variable">$pidfile</span>
+  fi
+  eend <span class="token variable">$?</span>
+&#125;
+
+restart() &#123;
+  ebegin "Restarting <span class="token variable">$name</span>"
+  start-stop-daemon --stop --quiet --pidfile <span class="token variable">$pidfile</span>
+  sleep 1
+  start-stop-daemon --start --quiet --background --name dingtalk --make-pidfile --pidfile <span class="token variable">$pidfile</span> --stderr <span class="token variable">$logfile</span> --user <span class="token variable">$user</span> --exec <span class="token variable">$command</span>
+  eend <span class="token variable">$?</span>
+&#125;
+EOF</span>
+
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> dingtalk:dingtalk /opt/dingtalk
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> dingtalk:dingtalk /data/dingtalk
+<span class="token function">chmod</span> +x /etc/init.d/dingtalk
+rc-update <span class="token function">add</span> dingtalk default<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Promtail-搭建"><a href="#Promtail-搭建" class="headerlink" title="Promtail 搭建"></a>Promtail 搭建</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">unzip</span> promtail-linux-amd64.zip
+<span class="token function">mv</span> promtail-linux-amd64 /opt/promtail/promtail
+
+<span class="token function">cat</span> <span class="token operator">></span> /opt/promtail/config.yaml <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /data/promtail/positions.yaml
+
+clients:
+  - url: http://localhost:3100/loki/api/v1/push
+
+scrape_configs:
+- job_name: EKS
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: "System Logs|EKS"
+      __path__: /var/log/messages
+  - targets:
+      - localhost
+    labels:
+      job: "Soft Logs|EKS"
+      __path__: /data/*/*log
+EOF</span>
+
+<span class="token function">cat</span> <span class="token operator">></span> /etc/init.d/promtail <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+#!/sbin/openrc-run
+
+name="promtail"
+description="Promtail"
+
+command="/opt/promtail/promtail -- --config.file=/opt/promtail/config.yaml"
+pidfile=/data/promtail/run.pid
+logfile=/data/promtail/<span class="token variable">$name</span>.log
+
+depend() &#123;
+  need net localmount
+  after firewall
+&#125;
+
+start_pre() &#123;
+  ebegin "Preparing to start <span class="token variable">$name</span>"
+  eend <span class="token variable">$?</span>
+&#125;
+
+start() &#123;
+  ebegin "Starting <span class="token variable">$name</span>"
+  start-stop-daemon --start --quiet --background --name promtail --make-pidfile --pidfile <span class="token variable">$pidfile</span> --stderr <span class="token variable">$logfile</span> --exec <span class="token variable">$command</span>
+  eend <span class="token variable">$?</span>
+&#125;
+
+stop() &#123;
+  ebegin "Stopping <span class="token variable">$name</span>"
+  start-stop-daemon --stop --quiet --pidfile <span class="token variable">$pidfile</span>
+  if [ -e <span class="token variable">$pidfile</span> ]
+    then rm <span class="token variable">$pidfile</span>
+  fi
+  eend <span class="token variable">$?</span>
+&#125;
+
+restart() &#123;
+  ebegin "Restarting <span class="token variable">$name</span>"
+  start-stop-daemon --stop --quiet --pidfile <span class="token variable">$pidfile</span>
+  sleep 1
+  start-stop-daemon --start --quiet --background --name promtail --make-pidfile --pidfile <span class="token variable">$pidfile</span> --stderr <span class="token variable">$logfile</span> --exec <span class="token variable">$command</span>
+  eend <span class="token variable">$?</span>
+&#125;
+EOF</span>
+
+<span class="token function">chmod</span> +x /etc/init.d/promtail
+rc-update <span class="token function">add</span> promtail default<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="启动各项服务"><a href="#启动各项服务" class="headerlink" title="启动各项服务"></a>启动各项服务</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">service</span> grafana start
+<span class="token function">service</span> loki start
+<span class="token function">service</span> prometheus start
+<span class="token function">service</span> alertmanager start
+<span class="token function">service</span> dingtalk start
+<span class="token function">service</span> promtail start<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="客户端搭建"><a href="#客户端搭建" class="headerlink" title="客户端搭建"></a>客户端搭建</h2><h3 id="Promtail-搭建-1"><a href="#Promtail-搭建-1" class="headerlink" title="Promtail 搭建"></a>Promtail 搭建</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /tmp
+<span class="token function">wget</span> <span class="token parameter variable">-c</span> https://github.com/grafana/loki/releases/download/v3.3.1/promtail-linux-amd64.zip
+<span class="token function">unzip</span> promtail-linux-amd64.zip
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /opt/promtail
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /data/promtail
+<span class="token function">mv</span> promtail-linux-amd64 /opt/promtail/promtail
+
+<span class="token function">cat</span> /opt/promtail/config.yaml <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /data/promtail/positions.yaml
+
+clients:
+  - url: http://192.168.10.1:3100/loki/api/v1/push
+
+scrape_configs:
+- job_name: MongoDB
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: "System Logs|MongoDB"
+      __path__: /var/log/*log
+  - targets:
+      - localhost
+    labels:
+      job: "MongoDB Logs|MongoDB"
+      __path__: /var/log/mongodb/*log
+EOF</span>
+
+<span class="token function">cat</span> <span class="token operator">></span> /etc/systemd/system/promtail.service <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+[Unit]
+Description=Promtail
+Documentation=https://github.com/grafana/loki
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/promtail/promtail --config.file=/opt/promtail/config.yaml
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF</span>
+
+systemctl daemon-reload
+systemctl <span class="token builtin class-name">enable</span> promtail.service
+systemctl start promtail.service<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Node-Exporter-搭建"><a href="#Node-Exporter-搭建" class="headerlink" title="Node Exporter 搭建"></a>Node Exporter 搭建</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /tmp
+<span class="token function">wget</span> <span class="token parameter variable">-c</span> https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz
+<span class="token function">tar</span> zxf node_exporter-1.8.2.linux-amd64.tar.gz
+
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /data/exporter
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /opt/exporter
+<span class="token function">mv</span> node_exporter-1.8.2.linux-amd64 /opt/exporter
+<span class="token function">mv</span> /opt/exporter/node_exporter /opt/exporter/exporter
+
+<span class="token function">useradd</span> <span class="token parameter variable">-r</span> <span class="token parameter variable">-M</span> exporter
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> exporter:exporter /data/exporter
+<span class="token function">chown</span> <span class="token parameter variable">-R</span> exporter:exporter /opt/exporter
+
+<span class="token function">cat</span> <span class="token operator">></span> /etc/systemd/system/exporter.service <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+[Unit]
+Description=Prometheus Node Exporter
+After=network.target
+ 
+[Service]
+Restart=on-failure
+ExecStart=/opt/exporter/exporter --web.listen-address=:9104
+ 
+[Install]
+WantedBy=multi-user.target
+EOF</span>
+
+systemctl daemon-reload
+systemctl <span class="token builtin class-name">enable</span> exporter.service
+systemctl start exporter.service<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="面板使用"><a href="#面板使用" class="headerlink" title="面板使用"></a>面板使用</h2><p>打开 Grafana 面板并登陆：<code>http://192.168.10.1:3000</code>，默认账号密码为 <code>admin/admin</code></p>
 <p><img src="https://cdn.free.gd/images/2024/12/01.5fknl4ex9c.avif" alt="01"></p>
 <p>在个人资料中修改语言为中文</p>
 <p><img src="https://cdn.free.gd/images/2024/12/02.73u0ib57fk.avif" alt="02"></p>
@@ -149,79 +838,4 @@
 <p><img src="https://cdn.free.gd/images/2024/12/10.esktk82qr.avif" alt="10"></p>
 <p>在左侧的 Logs 中可以查看日志信息，当然，还有一些诸如日志查询、搜索等功能，可以自己慢慢发现</p>
 <p><img src="https://cdn.free.gd/images/2024/12/11.7pcy4lxb8.avif" alt="11"></p>
-
-
-      
-
-    </section>
-    
-      <section class='ArticleMeta'>
-          <div>
-            发布于&nbsp;
-            <time datetime="2024-12-18T16:09:03.000Z" itemprop="datePublished">
-              2024-12-19
-            </time>
-          </div>
-          
-            <div>
-              tags: 
-  <li class="meta-text">
-  { <a href="/tags/%E6%97%A5%E5%BF%97/">日志</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Grafana/">Grafana</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Loki/">Loki</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Promtail/">Promtail</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Prometheus/">Prometheus</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/AlertManager/">AlertManager</a> }
-  </li>
-
-
-            </div>
-          
-      </section>
-    
-    
-</article>
-
-  
-</div>
-
-            <footer>
-    <div>© 2024 - 康诺 </div>
-    <div>
-        <span>
-            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>
-        </span>
-        ,
-        <span>
-            Theme - <a target="_blank" rel="noopener" href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
-        </span>
-    </div>
-</footer>
-
-        </div>
-    </div>
-</div>
-
-<script src="/js/pager/dist/singlepager.js"></script>
-
-<script>
-var sp = new Pager('data-pager-shell')
-
-</script>
-</body>
-</html>
+</article><section class="jump-container is-flex is-justify-content-space-between my-6"><!-- em is empty placeholder--><em></em><a class="button is-default" href="/openwrt-openclash-adguardhome.html" title="OpenWrt中OpenClash与AdGuardHome结合"><span class="has-text-weight-semibold">下一页: OpenWrt中OpenClash与AdGuardHome结合</span><i class="iconfont icon-next ml-2 has-text-grey"></i></a></section><article class="mt-6 comment-container"><script async repo="coolbie/Comments" src="https://utteranc.es/client.js" issue-term="pathname" theme="preferred-color-scheme"></script></article></div></div></main></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/ylqjgm"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 康诺 2024</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script src="/js/jquery-3.6.1.min.js"></script><script src="/js/jquery-fancybox.min.js"></script><script src="/js/img_zoom.js"></script><script src="/js/post.js"></script></body></html>
