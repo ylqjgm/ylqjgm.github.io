@@ -52,7 +52,7 @@ pkg <span class="token function">install</span> bash-static<span aria-hidden="tr
 <p><img src="https://coolbie.github.io/picx-images-hosting/images/2020/11/03.9rjgsmztma.avif" alt="03"></p>
 <p>这里可设置为根域名</p>
 <p><img src="https://coolbie.github.io/picx-images-hosting/images/2020/11/04.9gwmzhklgz.avif" alt="04"></p>
-<p>默认管理员帐号为 <a href="mailto:&#x70;&#111;&#x73;&#x74;&#x6d;&#97;&#115;&#116;&#101;&#114;&#x40;&#x64;&#111;&#x6d;&#x61;&#105;&#x6e;&#46;&#x63;&#x6f;&#109;">&#x70;&#111;&#x73;&#x74;&#x6d;&#97;&#115;&#116;&#101;&#114;&#x40;&#x64;&#111;&#x6d;&#x61;&#105;&#x6e;&#46;&#x63;&#x6f;&#109;</a> 且无法修改（domain.com 为您刚才设置的邮件域名）</p>
+<p>默认管理员帐号为 <a href="mailto:&#112;&#x6f;&#115;&#116;&#x6d;&#97;&#x73;&#x74;&#x65;&#114;&#x40;&#x64;&#x6f;&#109;&#x61;&#x69;&#110;&#x2e;&#x63;&#111;&#x6d;">&#112;&#x6f;&#115;&#116;&#x6d;&#97;&#x73;&#x74;&#x65;&#114;&#x40;&#x64;&#x6f;&#109;&#x61;&#x69;&#110;&#x2e;&#x63;&#111;&#x6d;</a> 且无法修改（domain.com 为您刚才设置的邮件域名）</p>
 <p><img src="https://coolbie.github.io/picx-images-hosting/images/2020/11/05.67xj2tx3ub.avif" alt="05"></p>
 <p>FreeBSD 版本只有 iRedAdmin、Roundcubemail、SOGo</p>
 <p><img src="https://coolbie.github.io/picx-images-hosting/images/2020/11/06.7zqhxqggqb.avif" alt="06"></p>
@@ -92,7 +92,7 @@ pkg <span class="token function">install</span> bash-static<span aria-hidden="tr
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">dig</span> <span class="token parameter variable">-t</span> txt dkim._domainkey.free.gd @8.8.8.8
 <span class="token function">nslookup</span> <span class="token parameter variable">-type</span><span class="token operator">=</span>txt dkim._domainkey.free.gd <span class="token number">8.8</span>.8.8<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<h3 id="DMARC-记录"><a href="#DMARC-记录" class="headerlink" title="DMARC 记录"></a>DMARC 记录</h3><p>DMARC 记录是当收件方检测到伪造邮件等行为时，将根据您的配置进行操作的一个记录，比如拒绝邮件或放入垃圾邮件以及不做处理等，同时会反馈一份检测报告到配置的邮箱地址内，添加方法就是增加一条 _dmarc 的 TXT 解析，内容为配置选项，比如 v&#x3D;DMARC1; p&#x3D;none; rua&#x3D;mailto:<a href="mailto:&#100;&#x6d;&#x61;&#x72;&#99;&#64;&#102;&#x72;&#101;&#x65;&#46;&#103;&#100;">&#100;&#x6d;&#x61;&#x72;&#99;&#64;&#102;&#x72;&#101;&#x65;&#46;&#103;&#100;</a>，检测方式：</p>
+<h3 id="DMARC-记录"><a href="#DMARC-记录" class="headerlink" title="DMARC 记录"></a>DMARC 记录</h3><p>DMARC 记录是当收件方检测到伪造邮件等行为时，将根据您的配置进行操作的一个记录，比如拒绝邮件或放入垃圾邮件以及不做处理等，同时会反馈一份检测报告到配置的邮箱地址内，添加方法就是增加一条 _dmarc 的 TXT 解析，内容为配置选项，比如 v&#x3D;DMARC1; p&#x3D;none; rua&#x3D;mailto:<a href="mailto:&#100;&#x6d;&#97;&#x72;&#x63;&#x40;&#102;&#x72;&#101;&#x65;&#46;&#103;&#100;">&#100;&#x6d;&#97;&#x72;&#x63;&#x40;&#102;&#x72;&#101;&#x65;&#46;&#103;&#100;</a>，检测方式：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">dig</span> <span class="token parameter variable">-t</span> txt _dmarc.free.gd @8.8.8.8
 <span class="token function">nslookup</span> <span class="token parameter variable">-type</span><span class="token operator">=</span>txt _dmarc.free.gd <span class="token number">8.8</span>.8.8<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
